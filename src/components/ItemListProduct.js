@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet } from "react-native"
 import { colors } from "../globals/colors"
 
-const ListProductCategory = ({itemProduct}) => {
+const ItemListProduct = ({itemProduct}) => {
     return (
     <View style={styles.container}>
         <Image style={styles.imageProduct} source={{uri: itemProduct.imageUrl}} />
@@ -41,5 +41,5 @@ const styles = StyleSheet.create ({
         fontWeight: "bold"
     }
 })
-export default ListProductCategory
+export default ItemListProduct
 
