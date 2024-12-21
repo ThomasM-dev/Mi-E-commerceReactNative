@@ -10,7 +10,7 @@
             "title": "Smartphone Galaxy S21",
             "description": "Pantalla AMOLED de 6.2 pulgadas, 128GB almacenamiento, triple cámara.",
             "price": 699.99,
-            "imageUrl": "https://unsplash.com/es/fotos/mando-a-distancia-sony-negro-sobre-mesa-negra-YKFBdV-RRXI"
+            "imageUrl": "https://m.media-amazon.com/images/I/41O5rizDJbL.jpg"
           },
           {
             "id": 2,
@@ -31,7 +31,7 @@
             "title": "Google Pixel 6",
             "description": "Pantalla OLED de 6.4 pulgadas, procesador Google Tensor, 128GB almacenamiento.",
             "price": 599.99,
-            "imageUrl": "https://m.media-amazon.com/images/I/41i1sZFOLOL._AC_SR38,50_.jpg"
+            "imageUrl": "https://m.media-amazon.com/images/I/31vPG6tvkmL.jpg"
           }
         ]
       },

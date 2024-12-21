@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         width: "100%",
         backgroundColor: colors.black,
+        flex: 1
     },
     categoryImage: {
         width: "100%",

@@ -1,14 +1,14 @@
 import { View, Text, Image, StyleSheet } from "react-native"
 import { colors } from "../globals/colors"
 
-const ItemListProduct = ({itemProduct}) => {
+const ItemProduct = ({itemProducts}) => {
     return (
     <View style={styles.container}>
-        <Image style={styles.imageProduct} source={{uri: itemProduct.imageUrl}} />
+        <Image style={styles.imageProduct} source={{uri: itemProducts.imageUrl}} />
         <View style={styles.containerText}>
-        <Text style={styles.textTitle}>{itemProduct.title}</Text>
-        <Text style={styles.textDescription}>Descripcion: {itemProduct.description}</Text>
-        <Text style={styles.textPrice}>Precio: ${itemProduct.price} ARS</Text>
+        <Text style={styles.textTitle}>{itemProducts.title}</Text>
+        <Text style={styles.textDescription}>Descripcion: {itemProducts.description}</Text>
+        <Text style={styles.textPrice}>Precio: ${itemProducts.price} ARS</Text>
         </View>
     </View>
     )
@@ -39,7 +39,10 @@ const styles = StyleSheet.create ({
     textDescription: {
         color: colors.gray,
         fontWeight: "bold"
+    },
+    textPrice: {
+        color: colors.white
     }
 })
-export default ItemListProduct
+export default ItemProduct
 

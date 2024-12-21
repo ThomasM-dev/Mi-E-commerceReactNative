@@ -12,6 +12,7 @@ const Header = ({title}) =>  {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.black,
+        flex: 1
     },
     Text: {
         fontSize: 40,

@@ -1,26 +1,40 @@
 import { useState } from "react"
 import { TextInput, View, Text, StyleSheet } from "react-native"
 import ButtonsSearch from "./ButtonsSearch"
-import { colors } from "../globals/colors"
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { colors } from "../globals/colors";
 
-const Search = () => {
-    const [input, setInput] = useState ("")
+const Search = ({onChangeKeyword}) => {
+    const [input, setInput] = useState("")
+    const [error, setError] = useState ("")
+    const regex = /^[a-zA-Z0-9 ]+$/
+
 
     const handleButtonSearh = () => {
-
+        if (!regex.test(input)) { // Verifica si la entrada no es válida
+            return setError("Caracter no permitido");
+        }
+        setError("")
+        onChangeKeyword(input)
     }
     const handleButtonRemove = () => {
-        
+        setInput("")
+        onChangeKeyword("")
+        setError("")
     }
+    
     return (
         <View style={styles.container}>
-            <TextInput
-            style={styles.input}
-            placeholder="Buscar"
+            <View style={styles.containerInput}>
+                <TextInput
+                    style={styles.input}
+                placeholder="Buscar"
+            placeholderTextColor={colors.gray}
             value={input}
-            onChangeText={setInput}
-            />
+            onChangeText={(text) => setInput(text)}
+                />
+                <Text style={styles.errorInput}>{ error? error: ""}</Text>
+            </View>
         <ButtonsSearch onPress={handleButtonSearh}>
             <FontAwesome name="search" size={20} color="white" />
         </ButtonsSearch>
@@ -32,19 +46,28 @@ const Search = () => {
 }
 const styles = StyleSheet.create({
     container: {
-        color: colors.orange,
+        color: colors.black,
         flexDirection: "row",
-        justifyContent: "space-around"
+        justifyContent: "space-around",
+        paddingTop: 20,
+        marginLeft: 10
     },
-    input:{
+    containerInput: {
+        flex: 1,
+    },
+    input: {
         color: colors.white,
-        width: "80%", 
         height: 40, 
         borderColor: colors.red,
         borderWidth: 1,
         borderRadius: 10,
-        marginBottom: 20,
         fontSize: 20
     },
+    errorInput: {
+        color: colors.white,
+        marginBottom: 10,
+        marginTop: 10,
+        fontWeight: "bold"
+    }
 })
 export default Search
