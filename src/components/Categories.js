@@ -31,7 +31,7 @@ const Categories = () => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.white,
+        backgroundColor: colors.black,
         justifyContent: "space-around",
         marginTop: 10,
         flex: 1,

@@ -7,7 +7,7 @@ const ListProductCategory = ({ categoryFiltered }) => {
     const [productsFiltered, setProductsFiltered] = useState([]);
     useEffect(() => {
         setProductsFiltered(categoryFiltered);
-    }, [categoryFiltered]);
+    }, []);
 
     return (
             <FlatList

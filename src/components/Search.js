@@ -22,10 +22,10 @@ const Search = () => {
             onChangeText={setInput}
             />
         <ButtonsSearch onPress={handleButtonSearh}>
-            <FontAwesome name="search" size={24} color="white" />
+            <FontAwesome name="search" size={20} color="white" />
         </ButtonsSearch>
         <ButtonsSearch onPress={handleButtonRemove}>
-        <FontAwesome name="remove" size={24} color="white" />
+        <FontAwesome name="remove" size={20} color="white" />
         </ButtonsSearch>
         </View>
     )
@@ -33,12 +33,11 @@ const Search = () => {
 const styles = StyleSheet.create({
     container: {
         color: colors.orange,
-        flex: 1,
         flexDirection: "row",
         justifyContent: "space-around"
     },
     input:{
-        color: colors.gray,
+        color: colors.white,
         width: "80%", 
         height: 40, 
         borderColor: colors.red,
