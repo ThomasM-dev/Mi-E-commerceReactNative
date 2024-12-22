@@ -10,7 +10,7 @@ const Categories = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [categoryFiltered, setCategoryFiltered] = useState([]);        
 
-    const handleCategorySelected = (category) => {
+    const handleCategorySelected = (category) => {        
         setSelectedCategory(category.category);        
         const filteredCategory = data.products.find((c) => c.category === category.category)?.items || [];
         setCategoryFiltered(filteredCategory);

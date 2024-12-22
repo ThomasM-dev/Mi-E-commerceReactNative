@@ -1,15 +1,28 @@
-import { View, Text, Image, StyleSheet } from "react-native"
+import { View, Text, Image, StyleSheet, Pressable } from "react-native"
 import { colors } from "../globals/colors"
+import { useState, useEffect } from "react"
+import ProductDetail from "./ProductDetail"
 
-const ItemProduct = ({itemProducts}) => {
+const ItemProduct = ({ itemProducts }) => {
+    const [product, setProduct] = useState("")
+    
+    const handleClickProducts = () => {
+        setProduct(itemProducts)        
+    }
+    
     return (
-    <View style={styles.container}>
+        <View style={styles.container}>
+        <Pressable onPress={handleClickProducts}>
         <Image style={styles.imageProduct} source={{uri: itemProducts.imageUrl}} />
         <View style={styles.containerText}>
-        <Text style={styles.textTitle}>{itemProducts.title}</Text>
-        <Text style={styles.textDescription}>Descripcion: {itemProducts.description}</Text>
-        <Text style={styles.textPrice}>Precio: ${itemProducts.price} ARS</Text>
-        </View>
+              <Text style={styles.textTitle}>{itemProducts.title}</Text>
+              <Text style={styles.textDescription}>Descripcion: {itemProducts.description}</Text>
+              <Text style={styles.textPrice}>Precio: ${itemProducts.price} ARS</Text>
+                </View>
+            </Pressable>
+            {product && (
+        <ProductDetail product={product}/>
+      )}
     </View>
     )
 }

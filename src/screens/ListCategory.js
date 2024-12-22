@@ -6,7 +6,7 @@ import ListProductCategory from "../components/ListProductCategory"
 const ListCategory = () => {
     return (
         <View style={styles.container}>
-            <ListProductCategory categoryFiltered={data.products[0].items}/>
+            <ListProductCategory/>
         </View>
     )
 }

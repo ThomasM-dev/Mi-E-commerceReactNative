@@ -5,7 +5,8 @@ import Search from "./Search";
 import Header from "./Header";
 import { colors } from "../globals/colors";
 
-const ListProductCategory = ({ categoryFiltered}) => {
+const ListProductCategory = ({ categoryFiltered }) => {
+    
     const [productsFiltered, setProductsFiltered] = useState([]);
     const [keywords, setKeyqwords] = useState("")
     
@@ -18,14 +19,15 @@ const ListProductCategory = ({ categoryFiltered}) => {
         }
     }, [keywords, categoryFiltered]);
 
+
     return (
         <View style={styles.container}>
             <Search onChangeKeyword={(t) => setKeyqwords(t)} />
             <FlatList
             keyExtractor={(item) => item.id.toString()}
             data={productsFiltered}
-            renderItem={({item}) => (
-                <ItemProduct itemProducts={item} />
+                renderItem={({ item }) => (
+                <ItemProduct itemProducts={item}/>
             )}
             />
         </View>

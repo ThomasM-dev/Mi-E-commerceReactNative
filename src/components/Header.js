@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
         textTransform: "uppercase",
         textAlign: "center",
         color: colors.red,
-        marginTop: 10,
         fontWeight: "bold"
     }
 })

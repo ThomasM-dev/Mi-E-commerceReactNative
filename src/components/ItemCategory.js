@@ -2,6 +2,7 @@ import { Text, Image, Pressable, StyleSheet } from "react-native";
 import { colors } from "../globals/colors";
 
 const ItemCategory = ({ category, onPress }) => {
+    
     return (
         <Pressable style={styles.container} onPress={() => onPress(category)}>
             <Image style={styles.categoryImage} source={{ uri: category.image }} />
