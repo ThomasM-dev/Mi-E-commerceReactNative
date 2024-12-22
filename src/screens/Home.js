@@ -7,7 +7,8 @@ import Categories from '../components/Categories'
 export default function Home() {
 return (
     <View style={styles.container}>
-        <ListCategory/>
+        {/* <Categories/>  */}
+        <ListCategory/> 
     </View>
 );
 }

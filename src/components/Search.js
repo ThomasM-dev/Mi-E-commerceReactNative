@@ -7,11 +7,11 @@ import { colors } from "../globals/colors";
 const Search = ({onChangeKeyword}) => {
     const [input, setInput] = useState("")
     const [error, setError] = useState ("")
+
     const regex = /^[a-zA-Z0-9 ]+$/
 
-
     const handleButtonSearh = () => {
-        if (!regex.test(input)) { // Verifica si la entrada no es válida
+        if (!regex.test(input)) { 
             return setError("Caracter no permitido");
         }
         setError("")
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         paddingTop: 20,
-        marginLeft: 10
+        marginLeft: 10,
     },
     containerInput: {
         flex: 1,

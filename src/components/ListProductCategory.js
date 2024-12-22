@@ -2,25 +2,25 @@ import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import ItemProduct from "./ItemProduct";
 import Search from "./Search";
+import Header from "./Header";
+import { colors } from "../globals/colors";
 
-const ListProductCategory = ({ categoryFiltered }) => {
+const ListProductCategory = ({ categoryFiltered}) => {
     const [productsFiltered, setProductsFiltered] = useState([]);
     const [keywords, setKeyqwords] = useState("")
     
     useEffect(() => {
-        setProductsFiltered(categoryFiltered);
-    }, []);
-    
-    useEffect(() => {
         if (keywords) {
-            return setProductsFiltered(productsFiltered.filter(product => product.title.includes(keywords)))
+            const filteredProducts = categoryFiltered.filter(product => product.title.toLowerCase().includes(keywords.toLowerCase()));
+            setProductsFiltered(filteredProducts);
+        } else {
+            setProductsFiltered(categoryFiltered);
         }
-        setProductsFiltered(categoryFiltered);
-    }, [keywords])
-    
+    }, [keywords, categoryFiltered]);
+
     return (
         <View style={styles.container}>
-            <Search  onChangeKeyword={(t) => setKeyqwords(t)} />
+            <Search onChangeKeyword={(t) => setKeyqwords(t)} />
             <FlatList
             keyExtractor={(item) => item.id.toString()}
             data={productsFiltered}

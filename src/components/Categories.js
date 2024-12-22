@@ -4,6 +4,7 @@ import data from "../data/products.json";
 import { colors } from "../globals/colors";
 import ItemCategory from "./ItemCategory";
 import ListProductCategory from "./ListProductCategory"; 
+import Header from "./Header";
 
 const Categories = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -15,8 +16,10 @@ const Categories = () => {
         setCategoryFiltered(filteredCategory);
     };
 
+
     return (
         <View style={styles.container}>
+            <Header title={"Categorias"}/>
             <FlatList
                 data={data.products}
                 keyExtractor={(item) => item.id.toString()}
@@ -24,7 +27,11 @@ const Categories = () => {
                     <ItemCategory category={item} onPress={() => handleCategorySelected(item)} />
                 )}
             />
-                <ListProductCategory categoryFiltered={categoryFiltered}/>
+                {selectedCategory && (
+                <ListProductCategory 
+                    categoryFiltered={categoryFiltered} 
+                />
+            )}
         </View>
     );
 };
