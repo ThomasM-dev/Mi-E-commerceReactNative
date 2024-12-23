@@ -1,17 +1,21 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import Home from "../screens/Home"
-import ListCategory from "../screens/ListCategory"
-import ProductDetail from "../screens/ProductDetail"
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import Home from "../screens/Home";
+import ProductDetail from "../screens/ProductDetail";
+import ListProductCategory from "../screens/ListProductCategory";
+
+const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
-    const stack = createNativeStackNavigator()
     return (
-        <stack.Navigator>
-            <stack.Screen name="Home" component={Home} />
-            <stack.Screen name="ListCategory" component={ListCategory} />
-            <stack.Screen name="ProductDetail" component={ProductDetail} />
-        </stack.Navigator>
-    )
-}
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="ListProductCategory" component={ListProductCategory} />
+                <Stack.Screen name="ProductDetail" component={ProductDetail} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+};
 
-export default Navigator
+export default Navigator;

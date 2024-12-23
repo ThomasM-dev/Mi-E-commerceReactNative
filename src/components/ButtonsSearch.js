@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, View } from "react-native"
 import { colors } from "../globals/colors";
 
-const ButtonsSearch = ({children, onPress, iconStyle}) =>  {
+const ButtonsSearch = ({ children, onPress, iconStyle }) => {
+    
     return (
         <View style={style.container}>
         <Pressable style={style.buttons} onPress={onPress}>

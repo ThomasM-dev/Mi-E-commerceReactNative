@@ -1,13 +1,12 @@
 import { StyleSheet, View,  } from 'react-native';
 import { colors } from '../globals/colors';
-import ProductDetail from './ProductDetail';
+import Categories from '../components/Categories';
 
 export default function Home() {
     
 return (
     <View style={styles.container}>
-        {/* <Categories/> */}
-        <ProductDetail/>
+        <Categories/>
     </View>
 );
 }

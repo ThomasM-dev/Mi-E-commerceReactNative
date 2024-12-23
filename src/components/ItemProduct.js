@@ -1,9 +1,10 @@
 import { View, Text, Image, StyleSheet, Pressable } from "react-native"
 import { colors } from "../globals/colors"
 import { useState, useEffect } from "react"
-import ProductDetail from "./ProductDetail"
+import ProductDetail from "../screens/ProductDetail"
 
 const ItemProduct = ({ itemProducts }) => {
+    
     const [product, setProduct] = useState("")
     
     const handleClickProducts = () => {
