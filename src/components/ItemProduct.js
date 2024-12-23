@@ -1,29 +1,19 @@
 import { View, Text, Image, StyleSheet, Pressable } from "react-native"
 import { colors } from "../globals/colors"
-import { useState, useEffect } from "react"
-import ProductDetail from "../screens/ProductDetail"
+import { useNavigation } from "@react-navigation/native"
 
 const ItemProduct = ({ itemProducts }) => {
-    
-    const [product, setProduct] = useState("")
-    
-    const handleClickProducts = () => {
-        setProduct(itemProducts)        
-    }
-    
+    const navigation = useNavigation ()
     return (
         <View style={styles.container}>
-        <Pressable onPress={handleClickProducts}>
+        <Pressable onPress={() => navigation.navigate("ProductDetail", {product: itemProducts})}>
         <Image style={styles.imageProduct} source={{uri: itemProducts.imageUrl}} />
         <View style={styles.containerText}>
-              <Text style={styles.textTitle}>{itemProducts.title}</Text>
-              <Text style={styles.textDescription}>Descripcion: {itemProducts.description}</Text>
-              <Text style={styles.textPrice}>Precio: ${itemProducts.price} ARS</Text>
+            <Text style={styles.textTitle}>{itemProducts.title}</Text>
+            <Text style={styles.stock}>Stock: {itemProducts.stock}</Text>
+            <Text style={styles.textPrice}>Precio: ${itemProducts.price} ARS</Text>
                 </View>
             </Pressable>
-            {product && (
-        <ProductDetail product={product}/>
-      )}
     </View>
     )
 }
@@ -50,8 +40,10 @@ const styles = StyleSheet.create ({
         fontWeight: "bold",
         fontSize: 20
     },
-    textDescription: {
+    stock: {
         color: colors.gray,
+        fontSize: 17,
+        marginBottom: 10,
         fontWeight: "bold"
     },
     textPrice: {

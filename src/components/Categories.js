@@ -1,23 +1,19 @@
 import { StyleSheet, FlatList, View } from "react-native";
-import { useState } from "react";
 import data from "../data/products.json";
 import { colors } from "../globals/colors";
 import ItemCategory from "./ItemCategory";
 import Header from "./Header";
 import { useNavigation } from "@react-navigation/native";
-import ListProductCategory from "../screens/ListProductCategory";
 
 const Categories = () => {
     const navigation = useNavigation ()
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [categoryFiltered, setCategoryFiltered] = useState([]);        
-
-    const handleCategorySelected = (category) => {        
-        setSelectedCategory(category.category);        
-        const filteredCategory = data.products.find((c) => c.category === category.category)?.items || [];
-        setCategoryFiltered(filteredCategory);
-        navigation.navigate("ListProductCategory", {categoryFiltered})
+    const handleCategorySelected = (category) => {
+        const filteredCategory = data.products.find((c) => c.category === category.category)?.items || [];        
+        if (filteredCategory.length > 0) {
+            navigation.navigate("ListProductCategory", { categoryFiltered: filteredCategory });
+        }
     };
+
 
     return (
         <View style={styles.container}>

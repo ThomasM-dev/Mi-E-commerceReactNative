@@ -5,7 +5,7 @@ import { useRoute } from "@react-navigation/native";
 import Search from "../components/Search"
 const ListProductCategory = () => {
     const route = useRoute();
-    const { categoryFiltered } = route.params;
+    const {categoryFiltered } = route.params;
     const [productsFiltered, setProductsFiltered] = useState([]);
     const [keywords, setKeywords] = useState("")
     

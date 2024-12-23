@@ -2,7 +2,9 @@ import { View, Image, StyleSheet, Text, Pressable, Alert } from "react-native";
 import { colors } from "../globals/colors";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
-const ProductDetail = ({product}) => {
+const ProductDetail = ({route}) => {
+    const {product} = route.params
+    console.log(product);
     
     return (
         <View style={styles.container}>
@@ -22,15 +24,15 @@ const ProductDetail = ({product}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.brown
+        backgroundColor: colors.brown,
     },
     imageProduct: {
         width: "100%",
         height:500,
-        justifyContent: "center"
+        resizeMode: "contain",
+        backgroundColor: colors.white
     },
     containerText: {
-        backgroundColor: colors.brown,
         width: "100%",
         height: 250,
     },

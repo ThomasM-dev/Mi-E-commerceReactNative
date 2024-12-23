@@ -10,6 +10,7 @@
             "title": "Smartphone Galaxy S21",
             "description": "Pantalla AMOLED de 6.2 pulgadas, 128GB almacenamiento, triple cámara.",
             "price": 699.99,
+            "stock" : 20,
             "imageUrl": "https://m.media-amazon.com/images/I/41O5rizDJbL.jpg"
           },
           {
@@ -17,6 +18,7 @@
             "title": "iPhone 13",
             "description": "Pantalla Super Retina XDR de 6.1 pulgadas, 128GB almacenamiento, cámara dual.",
             "price": 799.99,
+            "stock" : 44,
             "imageUrl": "https://isenacode.com/wp-content/uploads/2023/09/iphone-13-como-puerta-entrada-ecosistema-d-758x569.jpg"
           },
           {
@@ -24,6 +26,7 @@
             "title": "Xiaomi Redmi Note 11",
             "description": "Pantalla AMOLED de 6.43 pulgadas, 128GB almacenamiento, batería de 5000mAh.",
             "price": 299.99,
+            "stock" : 26,
             "imageUrl": "https://images.fravega.com/f300/d8793e881d76daccf80427cb2c4d37ec.jpg.webp"
           },
           {
@@ -31,6 +34,7 @@
             "title": "Google Pixel 6",
             "description": "Pantalla OLED de 6.4 pulgadas, procesador Google Tensor, 128GB almacenamiento.",
             "price": 599.99,
+            "stock" : 25,
             "imageUrl": "https://m.media-amazon.com/images/I/31vPG6tvkmL.jpg"
           }
         ]
@@ -45,6 +49,7 @@
             "title": "Netbook HP Stream",
             "description": "Pantalla de 14 pulgadas, 64GB almacenamiento eMMC, procesador Intel Celeron.",
             "price": 299.99,
+            "stock" : 34,
             "imageUrl": "https://ar-media.hptiendaenlinea.com/catalog/product/cache/b3b166914d87ce343d4dc5ec5117b502/2/M/2M6K7LA-1_T1679633388.png"
           },
           {
@@ -52,6 +57,7 @@
             "title": "Lenovo IdeaPad 1",
             "description": "Pantalla de 14 pulgadas, 128GB almacenamiento SSD, procesador AMD Athlon.",
             "price": 349.99,
+            "stock" : 45,
             "imageUrl": "https://images.fravega.com/f300/937806da60c4940ee2c613372dd051c9.jpg.webp"
           },
           {
@@ -59,13 +65,15 @@
             "title": "Acer Aspire 1",
             "description": "Pantalla de 15.6 pulgadas, procesador Intel Pentium, 4GB RAM, 128GB SSD.",
             "price": 379.99,
-            "imageUrl": "https://mauricomputacion.com.ar/images/productos/thumb/thumb_23070.webp"
+            "stock" : 13,
+            "imageUrl": "https://m.media-amazon.com/images/I/41XsBc5mJ7S.jpg"
           },
           {
             "id": 8,
             "title": "ASUS Chromebook Flip",
             "description": "Pantalla táctil Full HD de 14 pulgadas, 64GB almacenamiento eMMC, Chrome OS.",
             "price": 429.99,
+            "stock" : 17,
             "imageUrl": "https://m.media-amazon.com/images/I/71UV2RsG5UL._AC_SX466_.jpg"
           }
         ]
@@ -80,6 +88,7 @@
             "title": "Cargador inalámbrico",
             "description": "Base de carga rápida compatible con Qi, diseño compacto.",
             "price": 39.99,
+            "stock" : 23,
             "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_831530-MLA69289849154_052023-O.webp"
           },
           {
@@ -87,6 +96,7 @@
             "title": "Auriculares Inalámbricos Jbl Tune 520bt Azul",
             "description": "Los auriculares JBL Tune 520BT transmiten el potente sonido JBL Pure Bass gracias a la última tecnología 5.3 BT. Estos auriculares, muy fáciles de usar, ofrecen hasta 57 horas de puro placer auditivo y 3 horas adicionales de batería con solo 5 minutos de carga.",
             "price": 49.99,
+            "stock" : 64,
             "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_866274-MLA74805955125_022024-O.webp"
           },
           {
@@ -94,6 +104,7 @@
             "title": "Tripode Flexible Camaras Celular Tipo Pulpo Gopro Cuo",
             "description": "Mini trípode flexible y articulado con rosca universal para cámaras o celulares, incluye adaptador capaz de girar 360°.",
             "price": 19.99,
+            "stock" : 47,
             "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_663918-MLA44174037693_112020-O.webp"
           },
           {
@@ -101,6 +112,7 @@
             "title": "Cargador Portátil Xiaomi Redmi 20000mah Carga Rapida 18w Color Negro",
             "description": "Utiliza tu dispositivo en todo momento y lugar, asegurando una carga eficaz y segura con el cargador Xiaomi 20000mAh Redmi 18W.",
             "price": 59.99,
+            "stock" : 64,
             "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_893204-MLC48849483629_012022-O.webp"
           }
         ]
@@ -115,6 +127,7 @@
             "title": "Pelota de futbol",
             "description": "Pelota de fútbol tamaño oficial para niños.",
             "price": 20,
+            "stock" : 39,
             "imageUrl": "https://d28hi93gr697ol.cloudfront.net/586d6ca1-ace0-eb27-9e0b-2d0d3c3c6062/img/Producto/8b11b5ce-6fd6-d9c0-9cc5-acfaa5d988a8/Diseno-sin-titulo-2024-08-22T145200-176-66c77abd7f09d.webp"
           },
           {
@@ -122,6 +135,7 @@
             "title": "Lego Clasic",
             "description": "Set de bloques de construcción creativos.",
             "price": 50,
+            "stock" : 76,
             "imageUrl": "https://m.media-amazon.com/images/I/91XHi5cJDML._AC_SL1500_.jpg"
           },
           {
@@ -129,6 +143,7 @@
             "title": "Muñeca Barbie",
             "description": "Muñeca Barbie con accesorios de moda.",
             "price": 60,
+            "stock" : 23,
             "imageUrl": "https://imgs.search.brave.com/hphOmyPH7g5bC9zGpsBEorTRPz2XQFkLaZlAMFxfEac/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NjFWY0ZsOFgzMkwu/anBn"
           },
           {
@@ -136,6 +151,7 @@
             "title": "Carro de control remoto",
             "description": "Carro de control remoto con bateria recargable",
             "price": 45,
+            "stock" : 54,
             "imageUrl": "https://imgs.search.brave.com/J2ghuZPBalO9iksy1rNtBhn7PsxEfQaXnNKYDvzHaYY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NTFrYTUwbWVLekwu/anBn"
           },
           {
@@ -143,6 +159,7 @@
             "title" : "Puzzle",
             "description": "Puzzle de 1000 piezas",
             "price": 120,
+            "stock" : 67,
             "imageUrl": "https://imgs.search.brave.com/VnjVgta6keL1eD48H74_srWvxvNZ3JsoU40z-mfj8jY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NTFzeWpCWkdrbEwu/X0FDLl9TUjE4MCwy/MzAuanBn"
           },
           {
@@ -150,6 +167,7 @@
             "title": "Pelota de Basquet",
             "description":"Pelota de basquet tamaño oficial",
             "price": 25,
+            "stock" : 27,
             "imageUrl": "https://imgs.search.brave.com/GAamlO7m4GZuCTCOZ_pUiOsFnS7HWX14A0hKK75vk7E/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuYWRpZGFzLmNv/bS9pbWFnZXMvd182/MDAsZl9hdXRvLHFf/YXV0by8wMTVmNjcz/Y2U5MzI0OTJjYWU4/MGE3ZjUwMGQyMDQ5/OF85MzY2L1BlbG90/YV9kZV9CYXNxdWV0/X0FsbC1Db3VydF9V/TklTRVhfTmFyYW5q/YV9YMzU4NTlfMDFf/c3RhbmRhcmQuanBn"
           },
           {
@@ -157,6 +175,7 @@
             "title": "Piano para niños",
             "description": "Piano para niño con microfono a bluethoot",
             "price": 35,
+            "stock" : 88,
             "imageUrl": "https://imgs.search.brave.com/4g0SkwcZMVVWFqs8nbNomsiXx_wy311Ut0eBQwTuLuw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NjFROGg3UHVvT0wu/anBn"
           }
         ]
@@ -170,6 +189,7 @@
             "id": 1,
             "title": "Refrigerador No Frost 400L",
             "price": 319.99,
+            "stock" : 62,
             "description": "Refrigerador de alta eficiencia energética con capacidad de 400 litros. Incluye tecnología No Frost para evitar la acumulación de hielo, compartimentos ajustables, iluminación LED, y un diseño moderno en acero inoxidable. Ideal para familias de tamaño medio a grande.",
             "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_909179-MLA74780021795_022024-O.webp"
           },
@@ -178,6 +198,7 @@
             "title": "Lavadora Automatica 10kg",
             "description":"Lavadora automática con capacidad de 10 kg, 12 programas de lavado para diferentes tipos de telas, centrifugado de 1400 RPM y pantalla táctil para un manejo intuitivo. Función de inicio diferido y sistema de ahorro de agua para una mayor eficiencia.",
             "price": 359,
+            "stock" : 12,
             "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_987913-MLM42977747048_082020-O.webp"
           },
           {
@@ -185,6 +206,7 @@
             "title": "Microondas 20L con Grill",
             "description": "Microondas compacto de 20 litros con función de grill para gratinar y dorar tus alimentos. Incluye 5 niveles de potencia, temporizador de hasta 60 minutos, y un panel de control fácil de usar. Diseño moderno en color negro y acero.",
             "price": 223,
+            "stock" : 43,
             "imageUrl": "https://static.chollometro.com/threads/raw/R74r9/1404911_1/re/1024x1024/qt/60/1404911_1.jpg"
           },
           {
@@ -192,6 +214,7 @@
             "title": "Aspiradora Robot Inteligente",
             "description":"Aspiradora robot con sistema de navegación inteligente, capaz de limpiar suelos de madera, baldosas y alfombras. Incluye programación diaria, conexión WiFi para control mediante app, y una batería de larga duración que permite hasta 120 minutos de uso continuo.",
             "price": 135,
+            "stock" : 23,
             "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_720427-MLU78992217066_092024-O.webp"
           },
           {
@@ -199,6 +222,7 @@
             "title": "Horno Eléctrico 45L",
             "description":"Horno eléctrico de 45 litros con funciones de convección, grill y horneado. Incluye un temporizador de 90 minutos, control de temperatura ajustable hasta 250°C, y accesorios como bandeja para hornear y rejilla. Perfecto para preparar pizzas, pasteles y asados.",
             "price": 210,
+            "stock" : 49,
             "imageUrl": "https://petenattiar.vtexassets.com/arquivos/ids/205794-800-800?v=637932481119600000&width=800&height=800&aspect=true"
           },
           {
@@ -206,6 +230,7 @@
             "title": "Cafeteria Express",
             "description": "Cafetera express con sistema de capsula, ideal para preprar cafe expresso, capuchino y Latte",
             "price": 150,
+            "stock" : 22,
             "imageUrl": "https://www.rodo.com.ar/media/catalog/product/cache/855090a5c67e45b26c9e0d345e7592dc/y/e/yelmo_nubia_ce-5107_3_sin.jpg"
           }
         ]
