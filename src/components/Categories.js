@@ -2,7 +2,6 @@ import { StyleSheet, FlatList, View } from "react-native";
 import data from "../data/products.json";
 import { colors } from "../globals/colors";
 import ItemCategory from "./ItemCategory";
-import Header from "./Header";
 import { useNavigation } from "@react-navigation/native";
 
 const Categories = () => {
@@ -17,7 +16,6 @@ const Categories = () => {
 
     return (
         <View style={styles.container}>
-            <Header title={"Categorias"}/>
             <FlatList
                 data={data.products}
                 keyExtractor={(item) => item.id.toString()}

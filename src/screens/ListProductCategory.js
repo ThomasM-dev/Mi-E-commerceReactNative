@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import ItemProduct from "../components/ItemProduct";
-import { useRoute } from "@react-navigation/native";
 import Search from "../components/Search"
-const ListProductCategory = () => {
-    const route = useRoute();
-    const {categoryFiltered } = route.params;
+import { colors } from "../globals/colors";
+const ListProductCategory = ({route}) => {
+    const {categoryFiltered} = route.params
     const [productsFiltered, setProductsFiltered] = useState([]);
     const [keywords, setKeywords] = useState("")
     
@@ -35,7 +34,8 @@ const ListProductCategory = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: colors.black
     }
 })
 export default ListProductCategory;

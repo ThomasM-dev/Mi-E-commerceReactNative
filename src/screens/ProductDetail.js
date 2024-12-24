@@ -4,7 +4,6 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ProductDetail = ({route}) => {
     const {product} = route.params
-    console.log(product);
     
     return (
         <View style={styles.container}>
