@@ -7,7 +7,7 @@ import { colors } from "../globals/colors";
 
 const Stack = createNativeStackNavigator();
 
-const Navigator = () => {
+const StackNavigator = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName="Home"
@@ -48,4 +48,4 @@ const Navigator = () => {
     );
 };
 
-export default Navigator;
+export default StackNavigator;
