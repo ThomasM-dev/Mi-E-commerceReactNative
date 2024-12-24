@@ -4,7 +4,7 @@ import ItemProduct from "../components/ItemProduct";
 import Search from "../components/Search"
 import { colors } from "../globals/colors";
 const ListProductCategory = ({route}) => {
-    const {categoryFiltered} = route.params
+    const {categoryFiltered, category} = route.params
     const [productsFiltered, setProductsFiltered] = useState([]);
     const [keywords, setKeywords] = useState("")
     

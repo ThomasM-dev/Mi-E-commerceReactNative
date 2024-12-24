@@ -28,8 +28,21 @@ const Navigator = () => {
                     title: "Home",
                 }}
                 />
-                <Stack.Screen name="ListProductCategory" component={ListProductCategory} />
-                <Stack.Screen name="ProductDetail" component={ProductDetail} />
+                <Stack.Screen 
+                name="ListProductCategory" 
+                component={ListProductCategory}
+                options={({route})=> ({
+                    title: route.params.category
+                })}
+                />
+
+                <Stack.Screen 
+                name="ProductDetail" 
+                component={ProductDetail}
+                options={({route})=> ({
+                    title: route.params.product.title
+                })}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

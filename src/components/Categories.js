@@ -9,10 +9,9 @@ const Categories = () => {
     const handleCategorySelected = (category) => {
         const filteredCategory = data.products.find((c) => c.category === category.category)?.items || [];        
         if (filteredCategory.length > 0) {
-            navigation.navigate("ListProductCategory", { categoryFiltered: filteredCategory });
+            navigation.navigate("ListProductCategory", { categoryFiltered: filteredCategory, category:category.category });
         }
     };
-
 
     return (
         <View style={styles.container}>
