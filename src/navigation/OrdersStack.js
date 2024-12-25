@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import Orders from "../screens/Orders"
 const OrdersStack = () => {
-    const stack = createNativeStackNavigator ()
+    const Stack = createNativeStackNavigator ()
 return (
-    <stack.Navigator>
-        <stack.Screen name="Ordenes" component={Orders} />
-    </stack.Navigator>
+    <Stack.Navigator>
+        <Stack.Screen name="Ordenes" component={Orders} />
+    </Stack.Navigator>
 )
 }
 

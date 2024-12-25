@@ -1,11 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native"
-import StackNavigator from "./StackNavigator"
-import CartStack from "./CartStack"
+import TabNavigator from "./TabNavigator"
 
 const Navigation = () => {
 return (
     <NavigationContainer>
-        <CartStack/>
+        <TabNavigator/>
     </NavigationContainer>
 )
 }

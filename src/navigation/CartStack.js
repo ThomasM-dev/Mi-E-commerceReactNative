@@ -1,11 +1,14 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import Cart from "../screens/Cart"
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 const CartStack = () => {
-    const stack = createNativeStackNavigator()
+    const Stack = createNativeStackNavigator()
 return(
-    <stack.Navigator>
-        <stack.Screen name="carrito" component={Cart}/>
-    </stack.Navigator>
+    <Stack.Navigator>
+        <Stack.Screen
+        name="carrito" 
+        component={Cart}/>
+    </Stack.Navigator>
 )
 }
 

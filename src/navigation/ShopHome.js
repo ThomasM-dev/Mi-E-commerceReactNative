@@ -6,7 +6,7 @@ import { colors } from "../globals/colors";
 
 const Stack = createNativeStackNavigator();
 
-const StackNavigator = () => {
+const ShopHome = () => {
     return (
             <Stack.Navigator initialRouteName="Home"
             screenOptions={{
@@ -45,4 +45,4 @@ const StackNavigator = () => {
     );
 };
 
-export default StackNavigator;
+export default ShopHome;
