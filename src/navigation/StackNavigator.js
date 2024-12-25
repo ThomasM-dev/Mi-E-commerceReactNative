@@ -1,15 +1,13 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
-import Home from "../screens/Home";
-import ProductDetail from "../screens/ProductDetail";
-import ListProductCategory from "../screens/ListProductCategory";
+import Home from "../screens/Home"
+import ProductDetail from "../screens/ProductDetail"
+import ListProductCategory from "../screens/ListProductCategory"
 import { colors } from "../globals/colors";
 
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
     return (
-        <NavigationContainer>
             <Stack.Navigator initialRouteName="Home"
             screenOptions={{
                 headerStyle: { backgroundColor: colors.black},
@@ -44,7 +42,6 @@ const StackNavigator = () => {
                 })}
                 />
             </Stack.Navigator>
-        </NavigationContainer>
     );
 };
 
