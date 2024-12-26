@@ -21,7 +21,7 @@ const TabNavigator = () => {
         }}
         >
             <Tab.Screen 
-            name="Home" 
+            name="Inicio" 
             component={ShopHome} 
             options={{
                 tabBarIcon: ({focused}) =>  

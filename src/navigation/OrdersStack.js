@@ -4,7 +4,7 @@ const OrdersStack = () => {
     const Stack = createNativeStackNavigator ()
 return (
     <Stack.Navigator>
-        <Stack.Screen name="Ordenes" component={Orders} />
+        <Stack.Screen name="Order" component={Orders} />
     </Stack.Navigator>
 )
 }
