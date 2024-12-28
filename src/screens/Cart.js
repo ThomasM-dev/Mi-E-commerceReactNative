@@ -19,41 +19,45 @@ const Cart = () => {
             <Text style={styles.price}>Precio: ${productCart.price } ARS</Text>
         </View>
             </View>
+            <View style={styles.containerButton}>
             <Pressable style={styles.btnFinish}>
                 <Text style={styles.btnText}>Finalizar Compra</Text>
         </Pressable>
+            </View>
     </View>
 )
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.white
-
+        justifyContent: "space-between", 
+        marginTop: 50,
+        width: "100%",
+        backgroundColor: colors.white,
     },
     productCart: {
-        height: 120,
+        height: 110,
         width: "100%",
         flexWrap: "wrap",
         marginTop: 20,
     },
     imageProduct: {
-        width: 120,
-        height: 120,
-        resizeMode: "cover"
+        width: 110,
+        height: 110,
+        resizeMode: "cover",
     },
     containerText: {
-        marginLeft: 20
+        marginLeft: 20,
     },
     name: {
         color: colors.black,
         fontSize: 23,
-        marginBottom: 20
+        marginBottom: 20,
     },
     quantity: {
         color: colors.black,
         fontSize: 17,
-        marginBottom: 25
+        marginBottom: 25,
     },
     price: {
         color: colors.black,
@@ -61,12 +65,21 @@ const styles = StyleSheet.create({
     },
     btnFinish: {
         backgroundColor: colors.red,
-        paddingVertical: 10,
+        paddingVertical: 15,
+        borderRadius: 5,
+        width: "90%",
+        alignSelf: "center",
     },
     btnText: {
         color: colors.white,
         fontSize: 20,
-        textAlign: "center"
-    }
+        textAlign: "center",
+    },
+    containerButton: {
+        width: "100%", 
+        padding: 10,
+        backgroundColor: colors.white,
+    },
 })
+
 export default Cart

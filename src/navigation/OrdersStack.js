@@ -3,8 +3,14 @@ import Orders from "../screens/Orders"
 const OrdersStack = () => {
     const Stack = createNativeStackNavigator ()
 return (
-    <Stack.Navigator>
-        <Stack.Screen name="Order" component={Orders} />
+    <Stack.Navigator
+        screenOptions={{
+            headerShown: false
+        }}
+    >
+        <Stack.Screen
+            name="Order"
+            component={Orders} />
     </Stack.Navigator>
 )
 }
