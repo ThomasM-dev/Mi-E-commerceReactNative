@@ -40,7 +40,7 @@ const ShopHome = () => {
                 options={({route})=> ({
                     title: route.params.product.title
                 })}
-                />
+            />
             </Stack.Navigator>
     );
 };

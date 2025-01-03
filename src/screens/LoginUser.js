@@ -1,86 +1,136 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { colors } from "../globals/colors";
-import { useState } from "react";
 import TogglePasswordButton from "../components/TogglePasswordButton";
 
 const LoginUser = () => {
-    const [userCorreo, setUserCorreo] = useState("");
-    const [userPassword, setUserPassword] = useState("");
-    const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [name, setName] = useState("");
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Registrarse</Text>
-            <View style={styles.containerUser}>
-                <Text style={styles.textLogin}>Correo Electrónico: </Text>
-                <TextInput
-                    value={userCorreo}
-                    style={styles.textInput}
-                    onChangeText={setUserCorreo}
-                    placeholder="Ingrese su Correo Electrónico"
-                />
-            </View>
-            <View style={styles.containerUser}>
-                <Text style={styles.textLogin}>Contraseña: </Text>
-                <View style={styles.containerInputPassword}>
-                    <TextInput
-                        style={styles.textInputWithIcon}
-                        maxLength={9}
-                        value={userPassword}
-                        onChangeText={setUserPassword}
-                        placeholder="Ingrese su Contraseña"
-                        secureTextEntry={!passwordVisible}
-                    />
-                    <TogglePasswordButton
-                        icon={passwordVisible ? "eye" : "eye-slash"}
-                        onPress={() => setPasswordVisible(!passwordVisible)}
-                    />
-                </View>
-            </View>
+  const handleRegister = () => {
+    if (!email || !password || !name) {
+      Alert.alert("Error", "Todos los campos son obligatorios.");
+      return;
+    }
+
+    if (email.length < 6 || password.length < 9) {
+      Alert.alert("Error", "El correo debe tener al menos 6 caracteres y la contraseña 9 caracteres.");
+      return;
+    }
+
+    navigation.navigate("ProfileUser", {email, name});
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Registrarse</Text>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Nombre:</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder="Ingrese su nombre"
+        />
+      </View>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Correo Electrónico:</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Ingrese su correo electrónico"
+          keyboardType="email-address"
+        />
+      </View>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Contraseña:</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Ingrese su contraseña"
+            secureTextEntry={!passwordVisible}
+            maxLength={12}
+          />
+          <TogglePasswordButton
+            icon={passwordVisible ? "eye" : "eye-slash"}
+            onPress={() => setPasswordVisible(!passwordVisible)}
+          />
         </View>
-    );
+      </View>
+
+      <Pressable style={styles.registerButton} onPress={handleRegister}>
+        <Text style={styles.registerButtonText}>Registrarse</Text>
+      </Pressable>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colors.white,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    title: {
-        fontSize: 30,
-        marginBottom: 50
-    },
-    containerUser: {
-        margin: 30,
-        height: 80,
-        width: 250
-    },
-    textLogin: {
-        fontSize: 18,
-        textAlign: "left",
-        marginBottom: 5
-    },
-    containerInputPassword: {
-        flexDirection: "row",
-        alignItems: "center",
-        borderBottomWidth: 1,
-        borderBottomColor: colors.black
-    },
-    textInput: {
-        borderBottomColor: colors.black,
-        borderBottomWidth: 1,
-        paddingVertical: 8,
-        paddingHorizontal: 10,
-        fontSize: 16
-    },
-    textInputWithIcon: {
-        flex: 1,
-        paddingVertical: 8,
-        paddingHorizontal: 10,
-        fontSize: 16
-    }
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "bold",
+    marginBottom: 30,
+    color: colors.black,
+  },
+  inputGroup: {
+    width: "100%",
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: colors.black,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: colors.black,
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
+    backgroundColor: colors.white,
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: colors.black,
+    borderRadius: 8,
+    paddingRight: 10,
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 10,
+    fontSize: 16,
+  },
+  registerButton: {
+    backgroundColor: colors.green,
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  registerButtonText: {
+    fontSize: 16,
+    color: colors.white,
+    fontWeight: "bold",
+  },
 });
 
 export default LoginUser;
