@@ -2,13 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { colors } from './src/globals/colors';
 import Navigation from './src/navigation/Navigation';
-import ProfileUser from './src/screens/ProfileUser';
+import Store from './src/store/Store';
+import { Provider } from 'react-redux';
+
 export default function App() {
   return (
+    <Provider store={Store} >
     <View style={styles.container}>
       <StatusBar style="light" backgroundColor={colors.black} />
        <Navigation/> 
-    </View>
+      </View>
+      </Provider>
   );
 }
 
