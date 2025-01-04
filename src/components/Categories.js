@@ -6,15 +6,22 @@ import { useGetCategoryQuery } from "../services/ApiMyShop";
 import { useState } from "react";
 
 const Categories = () => {
+    const navigation = useNavigation()
     const {data: categorias,  isSuccess} = useGetCategoryQuery ()
-    
-    const navigation = useNavigation();
+
     const [categorySelected, setCategorySelected] = useState("");
-    
+    const [categoryId, setCategoryId] = useState ("")
+
     const handleCategorySelected = (category) => {
         setCategorySelected(category.category);
-        navigation.navigate("ListProductCategory", { categorySelected: category.category });
+        setCategoryId(category.id);
+        navigation.navigate("ListProductCategory", {
+            categorySelected: category.category,
+            categoryId: category.id
+        });
+        
     };
+    
     
     return (
         <View style={styles.container}>

@@ -30,7 +30,7 @@ const ShopHome = () => {
                 name="ListProductCategory" 
                 component={ListProductCategory}
                 options={({route})=> ({
-                    title: route.params.category
+                    title: route.params.categorySelected
                 })}
                 />
 
