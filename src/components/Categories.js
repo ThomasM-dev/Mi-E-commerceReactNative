@@ -3,15 +3,18 @@ import { colors } from "../globals/colors";
 import ItemCategory from "./ItemCategory";
 import { useNavigation } from "@react-navigation/native";
 import { useGetCategoryQuery } from "../services/ApiMyShop";
+import { useState } from "react";
 
 const Categories = () => {
-    const {data: categorias,  error, isLoading} = useGetCategoryQuery ()
+    const {data: categorias,  isSuccess} = useGetCategoryQuery ()
     
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const [categorySelected, setCategorySelected] = useState("");
     
     const handleCategorySelected = (category) => {
-        navigation.navigate("ListProductCategory", {category})
-    }
+        setCategorySelected(category.category);
+        navigation.navigate("ListProductCategory", { categorySelected: category.category });
+    };
     
     return (
         <View style={styles.container}>

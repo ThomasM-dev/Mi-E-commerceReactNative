@@ -10,7 +10,7 @@ export const ApiMyShop = createApi({
       query: () => "products.json", 
     }),
     getProductsByCategory: builder.query({
-        query: (categoryText) => `products.json?orderBy="category"&equalTo="${categoryText}"`,
+        query: (categorySelected) => `products.json?orderBy="category"&equalTo="${categorySelected}"`,
     }),
   }),
 });
