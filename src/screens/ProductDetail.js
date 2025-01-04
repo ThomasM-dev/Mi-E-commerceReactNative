@@ -1,10 +1,16 @@
 import { View, Image, StyleSheet, Text, Pressable, Alert, ScrollView } from "react-native";
 import { colors } from "../globals/colors";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/slices/cartSlice";
 
 const ProductDetail = ({route}) => {
     const {product} = route.params
-    
+    const dispatch = useDispatch()
+
+    const handleAddCart = (product) => {
+        dispatch(addToCart(product))
+    }
     return (
         <ScrollView style={styles.container}>
             <Image style={styles.imageProduct} source={{ uri: product.imageUrl}} />
@@ -12,7 +18,7 @@ const ProductDetail = ({route}) => {
                 <Text style={styles.title}>{product.title}</Text>
                 <Text style={styles.description}>{product.description}</Text>
                 <Text style={styles.price}>${product.price } ARS</Text>
-                <Pressable style={styles.buttonCart} onPress={() => Alert.alert("agregado correctamente")}>
+                <Pressable style={styles.buttonCart} onPress={() => handleAddCart(product)}>
                 <Text style={styles.textButtonCart}>Agregar al Carrito <AntDesign name="shoppingcart" size={25} color="white" /></Text>
                 </Pressable>
             </View>

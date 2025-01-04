@@ -1,45 +1,54 @@
-import { Text, View, Image, StyleSheet, Pressable } from "react-native"
+import { Text, View, Image, StyleSheet, Pressable, FlatList } from "react-native";
 import { colors } from "../globals/colors";
+import { useSelector } from "react-redux";
+
 const Cart = () => {
-    const productCart = {
-        name: "Espresso Coffee Maker",
-        quantity: 1, 
-        image: "https://m.media-amazon.com/images/I/81cpBt-u+5L.jpg", 
-        price: 120.99 
-      };
-      
+    const productCart = useSelector((state) => state.cartSlice.value.cart);
+    const totalCart = useSelector((state) => state.cartSlice.value.total);
+    console.log(productCart);
+    console.log(totalCart);
+    
+
     return (
-    <View style={styles.container}>
-    <View style={styles.productCart}>
-        <Image style={styles.imageProduct}
-            source={{ uri: productCart.image }} />
-        <View style={styles.containerText}>
-            <Text style={styles.name}>{productCart.name}</Text>
-            <Text style={styles.quantity}>Cantidad:  {productCart.quantity}</Text>
-            <Text style={styles.price}>Precio: ${productCart.price } ARS</Text>
-        </View>
-            </View>
+        <View style={styles.container}>
+            <FlatList
+                data={productCart}
+                keyExtractor={(item) => item.id.toString()} 
+                renderItem={({ item }) => (  
+                    <View style={styles.productCart}>
+                        <Image style={styles.imageProduct} source={{ uri: item.imageUrl }} />
+                        <View style={styles.containerText}>
+                            <Text style={styles.name}>{item.title}</Text>
+                            <Text style={styles.quantity}>Cantidad: {item.stock}</Text>
+                            <Text style={styles.price}>Precio: ${item.price} ARS</Text>
+                        </View>
+                    </View>
+                )}
+            />
             <View style={styles.containerButton}>
-            <Pressable style={styles.btnFinish}>
-                <Text style={styles.btnText}>Finalizar Compra</Text>
-        </Pressable>
+                <Pressable style={styles.btnFinish}>
+                    <Text style={styles.btnText}>Finalizar Compra</Text>
+                </Pressable>
             </View>
-    </View>
-)
-}
+        </View>
+    );
+};
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "space-between", 
+        justifyContent: "space-between",
         marginTop: 50,
         width: "100%",
         backgroundColor: colors.white,
     },
     productCart: {
-        height: 110,
-        width: "100%",
+        height: "20%",
+        width: "95%",
         flexWrap: "wrap",
-        marginTop: 20,
+        marginBottom: "5%",
+        marginHorizontal: "5%",
+        flexDirection: "row",  
     },
     imageProduct: {
         width: 110,
@@ -48,16 +57,17 @@ const styles = StyleSheet.create({
     },
     containerText: {
         marginLeft: 20,
+        justifyContent: "center",
     },
     name: {
         color: colors.black,
         fontSize: 23,
-        marginBottom: 20,
+        marginBottom: 10,
     },
     quantity: {
         color: colors.black,
         fontSize: 17,
-        marginBottom: 25,
+        marginBottom: 5,
     },
     price: {
         color: colors.black,
@@ -76,10 +86,10 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     containerButton: {
-        width: "100%", 
+        width: "100%",
         padding: 10,
         backgroundColor: colors.white,
     },
-})
+});
 
-export default Cart
+export default Cart;
