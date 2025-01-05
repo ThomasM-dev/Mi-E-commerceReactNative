@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   Pressable,
-  Alert,
   ScrollView,
   TextInput,
 } from 'react-native';
@@ -18,9 +17,17 @@ const ProductDetail = ({ route }) => {
   const { product } = route.params;
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
+  const [buttonText, setButtonText] = useState('Agregar al carrito');
+  const [disableButtom, setDisableButtom] = useState(false);
 
   const handleAddCart = (product) => {
     if (count >= 1) {
+      setButtonText('Producto agregado');
+      setDisableButtom(true);
+      setTimeout(() => {
+        setButtonText('Agregar al carrito');
+        setDisableButtom(false);
+      }, 1000);
       const productxCount = product.price * count;
       const productWithCount = { ...product, count, productxCount };
       dispatch(addToCart(productWithCount));
@@ -47,11 +54,15 @@ const ProductDetail = ({ route }) => {
           />
         </View>
         <Pressable
-          style={styles.buttonCart}
+          style={[
+            styles.buttonCart,
+            disableButtom && { backgroundColor: colors.black },
+          ]}
+          disabled={disableButtom}
           onPress={() => handleAddCart(product)}
         >
           <Text style={styles.textButtonCart}>
-            Agregar al Carrito{' '}
+            {buttonText}
             <AntDesign name="shoppingcart" size={25} color="white" />
           </Text>
         </Pressable>

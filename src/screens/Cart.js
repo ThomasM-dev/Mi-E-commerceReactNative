@@ -52,7 +52,7 @@ const Cart = () => {
         )}
       />
       <View style={styles.containerButton}>
-        <Text style={styles.priceTotal}>Total: ${totalCart} ARS</Text>
+      <Text style={styles.priceTotal}>Total: ${totalCart} ARS</Text>
         <Pressable style={styles.btnFinish}>
           <Text style={styles.btnText}>Finalizar Compra</Text>
         </Pressable>
