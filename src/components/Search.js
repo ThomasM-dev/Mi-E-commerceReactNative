@@ -27,11 +27,11 @@ const Search = ({onChangeKeyword}) => {
         <View style={styles.container}>
             <View style={styles.containerInput}>
                 <TextInput
-                    style={styles.input}
+                style={styles.input}
                 placeholder="Buscar"
-            placeholderTextColor={colors.gray}
-            value={input}
-            onChangeText={(text) => setInput(text)}
+                placeholderTextColor={colors.gray}
+                value={input}
+                onChangeText={(text) => setInput(text)}
                 />
                 <Text style={styles.errorInput}>{ error? error: ""}</Text>
             </View>

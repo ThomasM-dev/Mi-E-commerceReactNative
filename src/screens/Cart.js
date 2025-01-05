@@ -5,9 +5,14 @@ import { useSelector } from "react-redux";
 const Cart = () => {
     const productCart = useSelector((state) => state.cartSlice.value.cart);
     const totalCart = useSelector((state) => state.cartSlice.value.total);
-    console.log(productCart);
-    console.log(totalCart);
-    
+
+    if (productCart.length === 0) {
+        return (
+        <View style={styles.container}>
+            <Text>No hay productos en el carrito</Text>
+        </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
@@ -19,13 +24,14 @@ const Cart = () => {
                         <Image style={styles.imageProduct} source={{ uri: item.imageUrl }} />
                         <View style={styles.containerText}>
                             <Text style={styles.name}>{item.title}</Text>
-                            <Text style={styles.quantity}>Cantidad: {item.stock}</Text>
-                            <Text style={styles.price}>Precio: ${item.price} ARS</Text>
+                            <Text style={styles.count}>Cantidad: {item.count}</Text>
+                            <Text style={styles.price}>Precio: ${item.productxCount } ARS</Text>
                         </View>
                     </View>
                 )}
             />
             <View style={styles.containerButton}>
+                    <Text style={styles.priceTotal}>Total: ${totalCart} ARS</Text>
                 <Pressable style={styles.btnFinish}>
                     <Text style={styles.btnText}>Finalizar Compra</Text>
                 </Pressable>
@@ -64,7 +70,7 @@ const styles = StyleSheet.create({
         fontSize: 23,
         marginBottom: 10,
     },
-    quantity: {
+    count: {
         color: colors.black,
         fontSize: 17,
         marginBottom: 5,
@@ -73,12 +79,21 @@ const styles = StyleSheet.create({
         color: colors.black,
         fontSize: 17,
     },
+    priceTotal: {
+        fontSize: 23,
+        fontWeight: "bold", 
+        color: colors.red, 
+        marginTop: 10,
+        textAlign: "center", 
+    
+    },
     btnFinish: {
         backgroundColor: colors.red,
         paddingVertical: 15,
         borderRadius: 5,
         width: "90%",
         alignSelf: "center",
+        marginTop: 10
     },
     btnText: {
         color: colors.white,

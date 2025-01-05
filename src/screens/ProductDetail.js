@@ -1,16 +1,25 @@
-import { View, Image, StyleSheet, Text, Pressable, Alert, ScrollView } from "react-native";
+import { View, Image, StyleSheet, Text, Pressable, Alert, ScrollView, TextInput } from "react-native";
 import { colors } from "../globals/colors";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useDispatch } from "react-redux";
 import { addToCart } from "../store/slices/cartSlice";
+import { useState } from "react";
 
 const ProductDetail = ({route}) => {
     const {product} = route.params
     const dispatch = useDispatch()
-
+    const [count, setCount] = useState(1)
+    
     const handleAddCart = (product) => {
-        dispatch(addToCart(product))
-    }
+        if (count >= 1) {
+            const productxCount = product.price * count            
+            const productWithCount = { ...product, count, productxCount };
+            dispatch(addToCart(productWithCount));
+        } else {
+            alert("Error", "Ingrese al menos 1");
+        }
+    };
+    
     return (
         <ScrollView style={styles.container}>
             <Image style={styles.imageProduct} source={{ uri: product.imageUrl}} />
@@ -18,6 +27,16 @@ const ProductDetail = ({route}) => {
                 <Text style={styles.title}>{product.title}</Text>
                 <Text style={styles.description}>{product.description}</Text>
                 <Text style={styles.price}>${product.price } ARS</Text>
+                <View style={styles.containerInput}>
+                <TextInput 
+                style={styles.inputCount} 
+                keyboardType="numeric"  
+                placeholder="Ingrese la cantidad" 
+                placeholderTextColor={colors.white}
+                value={count.toString()}
+                onChangeText={(text) => setCount(Number(text))}
+                />
+                </View>
                 <Pressable style={styles.buttonCart} onPress={() => handleAddCart(product)}>
                 <Text style={styles.textButtonCart}>Agregar al Carrito <AntDesign name="shoppingcart" size={25} color="white" /></Text>
                 </Pressable>
@@ -56,11 +75,26 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 20
     },
+    containerInput: {
+        width: "70%",
+        height: "20%",
+        alignSelf: "center" 
+    },
+    inputCount: {
+        width: "100%",
+        height: "100%",
+        color: colors.white,
+        fontSize: 20,
+        borderWidth: 1,
+        borderColor: colors.white
+    },
     buttonCart:{
         marginTop: 40,
         height: 50,
-        width: "100%",
+        alignSelf: "center",
+        width: "90%", 
         backgroundColor: colors.red,
+        justifyContent: "center",
     },
     textButtonCart: {
         fontSize: 30,

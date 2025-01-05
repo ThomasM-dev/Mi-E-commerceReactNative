@@ -9,9 +9,16 @@ const cartSlice = createSlice({
     },
     name: "cart",
     reducers: {
-        addToCart: (state, action) => {
-            state.value.cart.push(action.payload)
+        addToCart: (state, action) => {                           
+            if (state.value.cart.find(product => product.id === action.payload.id)) {
+                alert("Producto ya existente")
+            }
+            else {
+                state.value.cart.push(action.payload)
+                state.value.total += action.payload.productxCount 
+            }            
         },
+        
     }
 })
 
