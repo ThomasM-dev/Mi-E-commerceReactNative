@@ -1,17 +1,28 @@
-import {Text,View,Image,StyleSheet,Pressable,FlatList} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  Pressable,
+  FlatList,
+} from 'react-native';
 import { colors } from '../globals/colors';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import EmptyCart from '../components/EmptyCart';
+import { removeItemToCart } from '../store/slices/cartSlice';
 
 const Cart = () => {
   const productCart = useSelector((state) => state.cartSlice.value.cart);
   const totalCart = useSelector((state) => state.cartSlice.value.total);
+  const dispatch = useDispatch();
+
+  const handleClickItemRemove = (item) => {
+    dispatch(removeItemToCart(item));
+  };
 
   if (productCart.length === 0) {
-    return (
-      <View style={styles.container}>
-        <Text>No hay productos en el carrito</Text>
-      </View>
-    );
+    return <EmptyCart />;
   }
 
   return (
@@ -31,6 +42,11 @@ const Cart = () => {
               <Text style={styles.price}>
                 Precio: ${item.productxCount} ARS
               </Text>
+            </View>
+            <View style={styles.containerRemoveItem}>
+              <Pressable onPress={() => handleClickItemRemove(item)}>
+                <Ionicons name="trash" size={24} color={colors.red} />
+              </Pressable>
             </View>
           </View>
         )}
@@ -52,62 +68,83 @@ const styles = StyleSheet.create({
     marginTop: 50,
     width: '100%',
     backgroundColor: colors.white,
+    paddingBottom: 20,
   },
   productCart: {
-    height: '20%',
-    width: '95%',
-    flexWrap: 'wrap',
+    marginTop: 25,
+    width: '90%',
     marginBottom: '5%',
     marginHorizontal: '5%',
     flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.lightGray,
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3.5,
+    elevation: 5,
   },
   imageProduct: {
-    width: 110,
-    height: 110,
+    width: 100,
+    height: 100,
     resizeMode: 'cover',
+    borderRadius: 8,
   },
   containerText: {
-    marginLeft: 20,
+    marginLeft: 15,
     justifyContent: 'center',
+    flex: 1,
   },
   name: {
     color: colors.black,
-    fontSize: 23,
-    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   count: {
     color: colors.black,
-    fontSize: 17,
+    fontSize: 16,
     marginBottom: 5,
   },
   price: {
     color: colors.black,
-    fontSize: 17,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   priceTotal: {
-    fontSize: 23,
+    fontSize: 24,
     fontWeight: 'bold',
     color: colors.red,
-    marginTop: 10,
+    marginTop: 15,
     textAlign: 'center',
   },
   btnFinish: {
     backgroundColor: colors.red,
     paddingVertical: 15,
-    borderRadius: 5,
+    borderRadius: 8,
     width: '90%',
     alignSelf: 'center',
-    marginTop: 10,
+    marginTop: 20,
+    elevation: 3,
   },
   btnText: {
     color: colors.white,
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'center',
+  },
+  containerRemoveItem: {
+    justifyContent: 'center',
+    marginLeft: 10,
   },
   containerButton: {
     width: '100%',
-    padding: 10,
+    paddingHorizontal: 10,
     backgroundColor: colors.white,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: colors.lightGray,
   },
 });
 
