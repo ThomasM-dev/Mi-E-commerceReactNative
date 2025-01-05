@@ -1,28 +1,38 @@
-import React, { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { colors } from "../globals/colors";
-import TogglePasswordButton from "../components/TogglePasswordButton";
+import React, { useState } from 'react';
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { colors } from '../globals/colors';
+import TogglePasswordButton from '../components/TogglePasswordButton';
 
 const LoginUser = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
 
   const handleRegister = () => {
     if (!email || !password || !name) {
-      Alert.alert("Error", "Todos los campos son obligatorios.");
+      Alert.alert('Error', 'Todos los campos son obligatorios.');
       return;
     }
 
     if (email.length < 6 || password.length < 9) {
-      Alert.alert("Error", "El correo debe tener al menos 6 caracteres y la contraseña 9 caracteres.");
+      Alert.alert(
+        'Error',
+        'El correo debe tener al menos 6 caracteres y la contraseña 9 caracteres.'
+      );
       return;
     }
 
-    navigation.navigate("ProfileUser", {email, name});
+    navigation.navigate('ProfileUser', { email, name });
   };
 
   return (
@@ -62,7 +72,7 @@ const LoginUser = () => {
             maxLength={12}
           />
           <TogglePasswordButton
-            icon={passwordVisible ? "eye" : "eye-slash"}
+            icon={passwordVisible ? 'eye' : 'eye-slash'}
             onPress={() => setPasswordVisible(!passwordVisible)}
           />
         </View>
@@ -79,18 +89,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 20,
   },
   title: {
     fontSize: 32,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 30,
     color: colors.black,
   },
   inputGroup: {
-    width: "100%",
+    width: '100%',
     marginBottom: 20,
   },
   label: {
@@ -107,8 +117,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   passwordContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: colors.black,
     borderRadius: 8,
@@ -124,12 +134,12 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   registerButtonText: {
     fontSize: 16,
     color: colors.white,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 
