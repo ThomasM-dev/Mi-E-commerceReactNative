@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Alert,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Pressable,StyleSheet,Text,TextInput,View,} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../globals/colors';
 import TogglePasswordButton from '../components/TogglePasswordButton';
@@ -18,10 +11,22 @@ const SigNupUser = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPassVisible, setConfirmPassVisible] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-
+  const [name, setName] = useState("")
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Registrarse</Text>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Nombre: </Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder="Ingrese su nombre"
+          keyboardType="email-address"
+        />
+      </View>
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Correo Electrónico:</Text>

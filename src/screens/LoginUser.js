@@ -31,7 +31,7 @@ const LoginUser = () => {
       return;
     }
 
-    navigation.navigate('ProfileUser', { email, name });
+    navigation.navigate('ProfileUser', { email });
   };
 
   return (

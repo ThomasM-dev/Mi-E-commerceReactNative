@@ -1,14 +1,15 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ImageProfile from "../../assets/profileImg.webp";
 
 const ProfileUser = ({ route }) => {
-  const { email, name } = route.params;
+  const { email} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.profileSection}>
-        <View style={styles.imgProfile} />
-        <Text style={styles.welcomeText}>Bienvenido, {name}!</Text>
+        <Image source={ImageProfile} style={styles.imgProfile} />
+        <Text style={styles.welcomeText}>Bienvenido, Usuario!</Text>
         <Text style={styles.sectionTitle}>Datos Personales:</Text>
         <Text style={styles.emailText}>Correo: {email}</Text>
       </View>
@@ -33,7 +34,6 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   imgProfile: {
-    backgroundColor: "#d9d9d9",
     height: 150,
     width: 150,
     borderRadius: 75,
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
     marginBottom: 10,
+    textAlign: "center",
   },
   sectionTitle: {
     fontSize: 18,
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#555",
     marginTop: 10,
+    textAlign: "center",
   },
   addressSection: {
     backgroundColor: "#f5f5f5",
@@ -62,6 +64,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 20,
   },
 });
 
