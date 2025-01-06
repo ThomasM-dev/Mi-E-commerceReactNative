@@ -16,10 +16,9 @@ const LoginUser = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [name, setName] = useState('');
 
   const handleRegister = () => {
-    if (!email || !password || !name) {
+    if (!email || !password) {
       Alert.alert('Error', 'Todos los campos son obligatorios.');
       return;
     }

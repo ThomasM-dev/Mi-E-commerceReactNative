@@ -18,7 +18,6 @@ const SigNupUser = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPassVisible, setConfirmPassVisible] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [name, setName] = useState('');
 
   return (
     <View style={styles.container}>
