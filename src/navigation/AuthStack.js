@@ -3,7 +3,7 @@ import LoginUser from '../screens/LoginUser';
 import ProfileUser from '../screens/ProfileUser';
 import SigNupUserStack from './SigNupUserStack';
 
-const LoginUserStack = () => {
+const AuthStack = () => {
   const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator
@@ -17,4 +17,4 @@ const LoginUserStack = () => {
     </Stack.Navigator>
   );
 };
-export default LoginUserStack;
+export default AuthStack;

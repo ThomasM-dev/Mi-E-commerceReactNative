@@ -4,7 +4,6 @@ import { colors } from './src/globals/colors';
 import Navigation from './src/navigation/Navigation';
 import Store from './src/store/Store';
 import { Provider } from 'react-redux';
-import SigNupUser from './src/screens/SigNupUser';
 
 export default function App() {
   return (

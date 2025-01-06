@@ -5,7 +5,6 @@ import ShopHome from './ShopHome';
 import { StyleSheet } from 'react-native';
 import { colors } from '../globals/colors';
 import TabBarIcon from '../components/TabBariCon';
-import LoginUserStack from './LoginUserStack';
 
 const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
@@ -47,16 +46,6 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <TabBarIcon name="list-ul" focused={focused} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="Mi perfil"
-        component={LoginUserStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon name="user" focused={focused} />
           ),
         }}
       />
