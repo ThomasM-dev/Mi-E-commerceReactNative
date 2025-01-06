@@ -1,106 +1,153 @@
-import { StyleSheet, TextInput, View, Text, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '../globals/colors';
+import React, { useState } from 'react';
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { colors } from '../globals/colors';
+import TogglePasswordButton from '../components/TogglePasswordButton';
 
 const SigNupUser = () => {
-    const navigation = useNavigation ()
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassVisible, setConfirmPassVisible] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [name, setName] = useState('');
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.textTitle}>Registrarse</Text>
-      <View style={styles.containerEmail}>
-        <Text style={styles.label}>Email:</Text>
-        <TextInput style={styles.input} value="email" />
-      </View>
+    <View style={styles.container}>
+      <Text style={styles.title}>Registrarse</Text>
 
-      <View style={styles.containerPassword}>
-        <Text style={styles.label}>Contraseña:</Text>
-        <TextInput style={styles.input} value="password" secureTextEntry />
-      </View>
-
-      <View style={styles.containerConfirmPassword}>
-        <Text style={styles.label}>Confirmar contraseña:</Text>
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Correo Electrónico:</Text>
         <TextInput
           style={styles.input}
-          value="confirmPassword"
-          secureTextEntry
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Ingrese su correo electrónico"
+          keyboardType="email-address"
         />
       </View>
-      <Pressable style={styles.buttonSignup}>
-        <Text style={styles.buttonTextSignup}>Registrarse</Text>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Contraseña:</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Ingrese su contraseña"
+            secureTextEntry={!passwordVisible}
+            maxLength={12}
+          />
+          <TogglePasswordButton
+            icon={passwordVisible ? 'eye' : 'eye-slash'}
+            onPress={() => setPasswordVisible(!passwordVisible)}
+          />
+        </View>
+      </View>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}> Confirmar Contraseña:</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            placeholder="Confirmar Contraseña"
+            secureTextEntry={!confirmPassVisible}
+            maxLength={12}
+          />
+          <TogglePasswordButton
+            icon={confirmPassVisible ? 'eye' : 'eye-slash'}
+            onPress={() => setConfirmPassVisible(!confirmPassVisible)}
+          />
+        </View>
+      </View>
+
+      <Pressable style={styles.registerButton}>
+        <Text style={styles.registerButtonText}>Registrarse</Text>
       </Pressable>
-      <View style={styles.containerButtonLogin}>
-        <Text style={styles.textLogin}>¿Ya tienes cuenta?</Text>
-        <Pressable onPress={() => navigation.navigate("LoginUser")}>
-          <Text style={styles.buttonTextLogin}>Iniciar Sesion</Text>
+      <View style={styles.containerButtonSigNup}>
+        <Text style={styles.textSigNup}>¿No tienes cuenta?</Text>
+        <Pressable onPress={() => navigation.navigate('LoginUser')}>
+          <Text style={styles.buttonTextSigNup}>Iniciar Sesion</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    backgroundColor: colors.white,
     justifyContent: 'center',
-    backgroundColor: '#f8f9fa',
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
-  textTitle: {
-    fontSize: 30,
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    color: colors.black,
+  },
+  inputGroup: {
+    width: '100%',
     marginBottom: 20,
-  },
-  containerEmail: {
-    width: '80%',
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  containerPassword: {
-    width: '80%',
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  containerConfirmPassword: {
-    width: '80%',
-    padding: 10,
-    borderRadius: 8,
   },
   label: {
     fontSize: 16,
-    color: '#000',
-    marginBottom: 5,
+    marginBottom: 8,
+    color: colors.black,
   },
   input: {
-    height: 40,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
-    fontSize: 14,
+    borderColor: colors.black,
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
+    backgroundColor: colors.white,
   },
-  buttonSignup: {
-    marginVertical: 30,
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.black,
+    borderRadius: 8,
+    paddingRight: 10,
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 10,
+    fontSize: 16,
+  },
+  registerButton: {
     backgroundColor: colors.red,
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 8,
     alignItems: 'center',
+    marginVertical: 20,
   },
-  buttonTextSignup: {
+  registerButtonText: {
     fontSize: 16,
     color: colors.white,
     fontWeight: 'bold',
   },
-  containerButtonLogin: {
+  containerButtonSigNup: {
     flexDirection: 'row',
   },
-  textLogin: {
+  textSigNup: {
     marginRight: 20,
   },
-  buttonTextLogin: {
+  buttonTextSigNup: {
     color: colors.blue,
   },
 });
