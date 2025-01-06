@@ -18,7 +18,7 @@ const cartSlice = createSlice({
       } else {
         state.value.cart.push(action.payload);
         state.value.total += action.payload.productxCount;
-        state.value.updateAt = Date.now().toLocaleString()
+        state.value.updateAt = Date.now().toLocaleString();
       }
     },
     removeItemToCart: (state, action) => {
@@ -26,7 +26,7 @@ const cartSlice = createSlice({
       state.value.cart = state.value.cart.filter(
         (product) => product.id !== action.payload.id
       );
-      state.value.updateAt = Date.now().toLocaleString()
+      state.value.updateAt = Date.now().toLocaleString();
     },
   },
 });

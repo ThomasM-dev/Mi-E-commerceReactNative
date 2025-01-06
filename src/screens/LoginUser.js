@@ -37,17 +37,7 @@ const LoginUser = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Registrarse</Text>
-
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Nombre:</Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder="Ingrese su nombre"
-        />
-      </View>
+      <Text style={styles.title}>Inciar Sesion</Text>
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Correo Electrónico:</Text>
@@ -79,8 +69,14 @@ const LoginUser = () => {
       </View>
 
       <Pressable style={styles.registerButton} onPress={handleRegister}>
-        <Text style={styles.registerButtonText}>Registrarse</Text>
+        <Text style={styles.registerButtonText}>Iniciar Sesion</Text>
       </Pressable>
+      <View style={styles.containerButtonSigNup}>
+        <Text style={styles.textSigNup}>¿No tienes cuenta?</Text>
+        <Pressable onPress={ () => navigation.navigate("SigNupUser")}>
+          <Text style={styles.buttonTextSigNup}>Registrarse</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -130,16 +126,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   registerButton: {
-    backgroundColor: colors.green,
+    backgroundColor: colors.red,
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 8,
     alignItems: 'center',
+    marginVertical: 20,
   },
   registerButtonText: {
     fontSize: 16,
     color: colors.white,
     fontWeight: 'bold',
+  },
+  containerButtonSigNup: {
+    flexDirection: 'row',
+  },
+  textSigNup: {
+    marginRight: 20,
+  },
+  buttonTextSigNup: {
+    color: colors.blue,
   },
 });
 
