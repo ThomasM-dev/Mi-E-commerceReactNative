@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Alert,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Pressable,StyleSheet,Text,TextInput,View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../globals/colors';
 import TogglePasswordButton from '../components/TogglePasswordButton';
@@ -17,21 +10,8 @@ const LoginUser = () => {
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const handleRegister = () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Todos los campos son obligatorios.');
-      return;
-    }
-
-    if (email.length < 6 || password.length < 9) {
-      Alert.alert(
-        'Error',
-        'El correo debe tener al menos 6 caracteres y la contraseña 9 caracteres.'
-      );
-      return;
-    }
-
-    navigation.navigate('ProfileUser', { email });
+  const onSubmit = async () => {
+    
   };
 
   return (
@@ -43,7 +23,7 @@ const LoginUser = () => {
         <TextInput
           style={styles.input}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(t) => setEmail(t)}
           placeholder="Ingrese su correo electrónico"
           keyboardType="email-address"
         />
@@ -55,7 +35,7 @@ const LoginUser = () => {
           <TextInput
             style={styles.passwordInput}
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(t) => setPassword(t)}
             placeholder="Ingrese su contraseña"
             secureTextEntry={!passwordVisible}
             maxLength={12}
@@ -67,12 +47,12 @@ const LoginUser = () => {
         </View>
       </View>
 
-      <Pressable style={styles.registerButton} onPress={handleRegister}>
+      <Pressable style={styles.registerButton} onPress={onSubmit}>
         <Text style={styles.registerButtonText}>Iniciar Sesion</Text>
       </Pressable>
       <View style={styles.containerButtonSigNup}>
         <Text style={styles.textSigNup}>¿No tienes cuenta?</Text>
-        <Pressable onPress={ () => navigation.navigate("SigNupUser")}>
+        <Pressable onPress={() => navigation.navigate('SigNupUser')}>
           <Text style={styles.buttonTextSigNup}>Registrarse</Text>
         </Pressable>
       </View>

@@ -3,6 +3,7 @@ import {Pressable,StyleSheet,Text,TextInput,View,} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../globals/colors';
 import TogglePasswordButton from '../components/TogglePasswordButton';
+import { useSigNupMutation } from '../services/AuthApi';
 
 const SigNupUser = () => {
   const navigation = useNavigation();
@@ -11,22 +12,18 @@ const SigNupUser = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPassVisible, setConfirmPassVisible] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [name, setName] = useState("")
+  const [triggerSigNup] = useSigNupMutation()
   
+
+  const onSubmit = async () => {
+
+   const response= await triggerSigNup({email, password})
+  }
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Registrarse</Text>
-
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Nombre: </Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder="Ingrese su nombre"
-          keyboardType="email-address"
-        />
-      </View>
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Correo Electrónico:</Text>
@@ -75,7 +72,7 @@ const SigNupUser = () => {
         </View>
       </View>
 
-      <Pressable style={styles.registerButton}>
+      <Pressable style={styles.registerButton} onPress={onSubmit}>
         <Text style={styles.registerButtonText}>Registrarse</Text>
       </Pressable>
       <View style={styles.containerButtonSigNup}>
