@@ -3,7 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ImageProfile from "../../assets/profileImg.webp";
 
 const ProfileUser = ({ route }) => {
-  const { email} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -11,7 +10,7 @@ const ProfileUser = ({ route }) => {
         <Image source={ImageProfile} style={styles.imgProfile} />
         <Text style={styles.welcomeText}>Bienvenido, Usuario!</Text>
         <Text style={styles.sectionTitle}>Datos Personales:</Text>
-        <Text style={styles.emailText}>Correo: {email}</Text>
+        <Text style={styles.emailText}>Correo: </Text>
       </View>
 
       <View style={styles.addressSection}>
