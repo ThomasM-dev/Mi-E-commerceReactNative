@@ -5,7 +5,7 @@ import ShopHome from './ShopHome';
 import { StyleSheet } from 'react-native';
 import { colors } from '../globals/colors';
 import TabBarIcon from '../components/TabBariCon';
-import ProfileUser from "../screens/ProfileUser"
+import StackProfile from './StackProfile';
 
 const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
@@ -53,7 +53,7 @@ const TabNavigator = () => {
 
       <Tab.Screen
         name="Mi perfil"
-        component={ProfileUser}
+        component={StackProfile}
         options={{
           tabBarIcon: ({ focused }) => (
             <TabBarIcon name="user" focused={focused} />

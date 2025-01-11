@@ -4,13 +4,14 @@ import { colors } from './src/globals/colors';
 import Navigation from './src/navigation/Navigation';
 import Store from './src/store/Store';
 import { Provider } from 'react-redux';
+import ProfileUser from './src/screens/ProfileUser';
 
 export default function App() {
   return (
     <Provider store={Store} >
     <View style={styles.container}>
       <StatusBar style="light" backgroundColor={colors.black} />
-        <Navigation/> 
+        <Navigation/>
       </View>
       </Provider>
   );

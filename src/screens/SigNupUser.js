@@ -4,27 +4,46 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from '../globals/colors';
 import TogglePasswordButton from '../components/TogglePasswordButton';
 import { useSigNupMutation } from '../services/AuthApi';
+import { sigNupValidation } from '../validation/sigNupValidation';
+import { useDispatch } from 'react-redux';
 
 const SigNupUser = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPassVisible, setConfirmPassVisible] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [triggerSigNup] = useSigNupMutation()
+  const [errors, setErrors] = useState({});
+
   
-
   const onSubmit = async () => {
-
-   const response= await triggerSigNup({email, password})
-  }
-
-
+    try {
+      setErrors({});
+      await sigNupValidation.validate({ email, password, confirmPassword });
+      const response = await triggerSigNup({ email, password });
+      const user = {
+        email:response.data.email,
+        idToken:response.data.idToken,
+    }
+    dispatch(setUser(user))
+    navigation.navigate("TabNavigator")
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        // Mostrar errores de validación en pantalla
+        setErrors({ [error.path]: error.message });
+      } else {
+        // Mostrar otros errores en pantalla (como errores del servidor)
+        setErrors({ general: 'Error en el registro. Por favor, inténtalo nuevamente.' });
+      }
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Registrarse</Text>
-
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Correo Electrónico:</Text>
         <TextInput
@@ -34,6 +53,7 @@ const SigNupUser = () => {
           placeholder="Ingrese su correo electrónico"
           keyboardType="email-address"
         />
+        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
       </View>
 
       <View style={styles.inputGroup}>
@@ -52,6 +72,7 @@ const SigNupUser = () => {
             onPress={() => setPasswordVisible(!passwordVisible)}
           />
         </View>
+        {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
       </View>
 
       <View style={styles.inputGroup}>
@@ -70,6 +91,7 @@ const SigNupUser = () => {
             onPress={() => setConfirmPassVisible(!confirmPassVisible)}
           />
         </View>
+        {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
       </View>
 
       <Pressable style={styles.registerButton} onPress={onSubmit}>
@@ -151,6 +173,12 @@ const styles = StyleSheet.create({
   buttonTextSigNup: {
     color: colors.blue,
   },
+  errorText: {
+    color: colors.red,
+    fontSize: 14,
+    marginTop: 4,
+  },
+
 });
 
 export default SigNupUser;

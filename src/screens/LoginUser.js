@@ -3,15 +3,30 @@ import {Pressable,StyleSheet,Text,TextInput,View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../globals/colors';
 import TogglePasswordButton from '../components/TogglePasswordButton';
+import { useLoginMutation } from '../services/AuthApi';
+import loginValidation from '../validation/loginValidation';
 
 const LoginUser = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [triggerLogin] = useLoginMutation()
 
   const onSubmit = async () => {
-    
+    try {
+      setErrors({});
+      await loginValidation.validate({ email, password });
+      const response = await triggerLogin({ email, password }).unwrap();
+      console.log("Inicio de sesión exitoso:", response);
+    } catch (error) {
+      if (error.name === "ValidationError") {
+        setErrors({ [error.path]: error.message });
+      } else if (error.data) {
+        setErrors({ api: error.data.error.message });
+      } 
+    }
   };
 
   return (
@@ -27,6 +42,7 @@ const LoginUser = () => {
           placeholder="Ingrese su correo electrónico"
           keyboardType="email-address"
         />
+        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
       </View>
 
       <View style={styles.inputGroup}>
@@ -45,7 +61,10 @@ const LoginUser = () => {
             onPress={() => setPasswordVisible(!passwordVisible)}
           />
         </View>
+        {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
       </View>
+
+      {errors.api && <Text style={styles.errorText}>{errors.api}</Text>}
 
       <Pressable style={styles.registerButton} onPress={onSubmit}>
         <Text style={styles.registerButtonText}>Iniciar Sesion</Text>
@@ -125,6 +144,11 @@ const styles = StyleSheet.create({
   },
   buttonTextSigNup: {
     color: colors.blue,
+  },
+  errorText: {
+    color: colors.red,
+    fontSize: 12,
+    marginTop: 5,
   },
 });
 
