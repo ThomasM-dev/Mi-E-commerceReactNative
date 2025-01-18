@@ -4,6 +4,7 @@ import ProfileImgDefault from "../../assets/profileImg.webp";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch, useSelector } from "react-redux";
 import { changeImage } from "../store/slices/profileSlice";
+import LocationSelector from "../components/LocationSelector";
 
 const ProfileUser = () => {
   const dispatch = useDispatch()
@@ -40,9 +41,8 @@ const ProfileUser = () => {
       console.log("Permiso denegado para acceder a la galería");
     }
   };
-  
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.profileSection}>
         <Image source={imageProfile? imageProfile: ProfileImgDefault } style={styles.imgProfile} />
         <View style={styles.buttonsImageProfile}>
@@ -54,13 +54,10 @@ const ProfileUser = () => {
           </Pressable>
         </View>
         <Text style={styles.welcomeText}>Bienvenido, Usuario!</Text>
-        <Text style={styles.sectionTitle}>Datos Personales:</Text>
         <Text style={styles.emailText}>Correo: </Text>
       </View>
-      <View style={styles.addressSection}>
-        <Text style={styles.sectionTitle}>Dirección de Entrega</Text>
-      </View>
-    </SafeAreaView>
+      <LocationSelector/>
+    </View>
   );
 };
 
@@ -89,25 +86,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#555",
-    marginTop: 20,
-  },
   emailText: {
     fontSize: 16,
     color: "#555",
     marginTop: 10,
     textAlign: "center",
-  },
-  addressSection: {
-    backgroundColor: "#f5f5f5",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 20,
   },
   pressable: {
     backgroundColor: "#007bff",

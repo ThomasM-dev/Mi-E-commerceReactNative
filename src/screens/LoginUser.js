@@ -20,6 +20,7 @@ const LoginUser = () => {
       await loginValidation.validate({ email, password });
       const response = await triggerLogin({ email, password }).unwrap();
       console.log("Inicio de sesión exitoso:", response);
+      navigation.navigate("ProfileUser")
     } catch (error) {
       if (error.name === "ValidationError") {
         setErrors({ [error.path]: error.message });
@@ -32,7 +33,6 @@ const LoginUser = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inciar Sesion</Text>
-
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Correo Electrónico:</Text>
         <TextInput

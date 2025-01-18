@@ -8,7 +8,7 @@ const Navigation = () => {
     
   return (
     <NavigationContainer>
-      <TabNavigator/>
+      {idToken?  <TabNavigator/> : <AuthStack/> }
     </NavigationContainer>
   );
 };

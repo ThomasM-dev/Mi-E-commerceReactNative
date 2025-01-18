@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Pressable,StyleSheet,Text,TextInput,View,} from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../globals/colors';
 import TogglePasswordButton from '../components/TogglePasswordButton';
@@ -15,32 +15,40 @@ const SigNupUser = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPassVisible, setConfirmPassVisible] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [triggerSigNup] = useSigNupMutation()
+  const [triggerSigNup] = useSigNupMutation();
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  
   const onSubmit = async () => {
     try {
       setErrors({});
+      setLoading(true);
       await sigNupValidation.validate({ email, password, confirmPassword });
       const response = await triggerSigNup({ email, password });
       const user = {
-        email:response.data.email,
-        idToken:response.data.idToken,
-    }
-    dispatch(setUser(user))
-    navigation.navigate("TabNavigator")
+        email: response.data.email,
+        idToken: response.data.idToken,
+      };
+      dispatch(setUser(user));
+      navigation.navigate('TabNavigator');
     } catch (error) {
       if (error.name === 'ValidationError') {
-        // Mostrar errores de validación en pantalla
         setErrors({ [error.path]: error.message });
+      } else if (error.response && error.response.data) {
+        const serverMessage =
+          error.response.data.message || 'Error desconocido';
+        setErrors({ general: serverMessage });
       } else {
-        // Mostrar otros errores en pantalla (como errores del servidor)
-        setErrors({ general: 'Error en el registro. Por favor, inténtalo nuevamente.' });
+        setErrors({
+          general: 'Error en el registro. Por favor, inténtalo nuevamente.',
+        });
+        console.error('Error inesperado:', error);
       }
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Registrarse</Text>
@@ -72,7 +80,9 @@ const SigNupUser = () => {
             onPress={() => setPasswordVisible(!passwordVisible)}
           />
         </View>
-        {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+        )}
       </View>
 
       <View style={styles.inputGroup}>
@@ -91,12 +101,23 @@ const SigNupUser = () => {
             onPress={() => setConfirmPassVisible(!confirmPassVisible)}
           />
         </View>
-        {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
+        {errors.confirmPassword && (
+          <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+        )}
       </View>
-
-      <Pressable style={styles.registerButton} onPress={onSubmit}>
-        <Text style={styles.registerButtonText}>Registrarse</Text>
+      <Pressable
+        style={[
+          styles.registerButton,
+          loading && styles.registerButtonDisabled, 
+        ]}
+        onPress={loading ? null : onSubmit}
+        disabled={loading}
+      >
+        <Text style={styles.registerButtonText}>
+          {loading ? 'Cargando...' : 'Registrarse'}
+        </Text>
       </Pressable>
+
       <View style={styles.containerButtonSigNup}>
         <Text style={styles.textSigNup}>¿No tienes cuenta?</Text>
         <Pressable onPress={() => navigation.navigate('LoginUser')}>
@@ -178,7 +199,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 4,
   },
-
+  registerButton: {
+    backgroundColor: colors.red,
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  registerButtonDisabled: {
+    backgroundColor: "#a0a0a0", 
+    opacity: 0.6,
+  },
+  registerButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
 
 export default SigNupUser;
