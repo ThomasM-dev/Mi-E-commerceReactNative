@@ -3,6 +3,8 @@ import * as Location from 'expo-location';
 import { useState, useEffect } from 'react';
 import { api_geocode_key } from '../data/ApiPost';
 import CustomInput from './CustomInput';
+import { useDispatch } from 'react-redux';
+import { setAddress } from '../store/slices/addressSlice';
 
 const LocationSelector = () => {
   const [position, setPosition] = useState({ lat: '', long: '' });
@@ -12,10 +14,10 @@ const LocationSelector = () => {
   const [height, setHeight] = useState('');
   const [street, setStreet] = useState('');
   const [loadingLocation, setLoadingLocation] = useState(false);
-
+  const dispatch = useDispatch();
 
   const handleLocation = async () => {
-    setLoadingLocation(true)
+    setLoadingLocation(true);
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status === 'granted') {
       let location = await Location.getCurrentPositionAsync({});
@@ -36,7 +38,6 @@ const LocationSelector = () => {
         try {
           const response = await fetch(addressUser);
           const data = await response.json();
-          console.log('Dirección obtenida:', data);
           setCity(data.address.city || '');
           setCountry(data.address.country || '');
           setPostalCode(data.address.postcode || '');
@@ -49,11 +50,16 @@ const LocationSelector = () => {
     }
   }, [position]);
 
-  const handleSave = () => {
-    const address = { city, country, postalCode, height, street };
-    console.log('Dirección guardada:', address);
+  const handleSaveAddress = () => {
+    const address = {
+      city,
+      country,
+      postalCode,
+      street,
+      height,
+    };
+    dispatch(setAddress(address));
   };
-
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Dirección de Entrega</Text>
@@ -80,11 +86,12 @@ const LocationSelector = () => {
       />
 
       <Pressable onPress={handleLocation} style={styles.button}>
-      <Text style={styles.buttonText}>{loadingLocation ? 'Cargando ubicación...' : 'Usar mi ubicación'}</Text>
+        <Text style={styles.buttonText}>
+          {loadingLocation ? 'Cargando ubicación...' : 'Usar mi ubicación'}
+        </Text>
       </Pressable>
-
-      <Pressable onPress={handleSave} style={styles.button}>
-        <Text style={styles.buttonText}>Guardar</Text>
+      <Pressable style={styles.button} onPress={handleSaveAddress}>
+        <Text style={styles.buttonText}>Guardar ubicación</Text>
       </Pressable>
     </ScrollView>
   );

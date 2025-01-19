@@ -6,17 +6,18 @@ import { changeImage } from '../store/slices/profileSlice';
 import LocationSelector from '../components/LocationSelector';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const ProfileUser = () => {
+const ProfileUser = ({ address }) => {
   const dispatch = useDispatch();
   const imageProfile = useSelector((state) => state.profile.image);
   const emailUser = useSelector((state) => state.user.email);
+  const addressUser = useSelector((state) => state.addressUser.address);
 
   const handleChangeImageCamera = async () => {
     try {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
       if (status !== 'granted') {
-        console.warn("Permiso denegado para usar la cámara.");
-        return; 
+        console.warn('Permiso denegado para usar la cámara.');
+        return;
       }
       const data = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
@@ -28,16 +29,17 @@ const ProfileUser = () => {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
         dispatch(changeImage(base64Image));
       } else {
-        console.warn("Captura de imagen cancelada o datos inválidos.");
+        console.warn('Captura de imagen cancelada o datos inválidos.');
       }
     } catch (error) {
-      console.error("Error al capturar la imagen:", error);
+      console.error('Error al capturar la imagen:', error);
     }
   };
-  
+
   const handleChangeImageGallery = async () => {
     try {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
         console.warn('Permiso denegado para acceder a la galería.');
         return;
@@ -59,11 +61,15 @@ const ProfileUser = () => {
     }
   };
 
+  const handleSaveDateUser = () => {
+    console.log('datos del usuario', addressUser, emailUser, imageProfile);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.profileSection}>
         <Image
-            source={imageProfile ? { uri: imageProfile } : ProfileImgDefault} 
+          source={imageProfile ? { uri: imageProfile } : ProfileImgDefault}
           style={styles.imgProfile}
         />
         <View style={styles.buttonsImageProfile}>
@@ -78,9 +84,12 @@ const ProfileUser = () => {
           </Pressable>
         </View>
         <Text style={styles.textProfile}>Bienvenido, Usuario!</Text>
-        <Text style={styles.emailText}>Correo: { emailUser || 'Usuari@'}</Text>
+        <Text style={styles.emailText}>Correo: {emailUser || 'Usuari@'}</Text>
       </View>
       <LocationSelector />
+      <Pressable onPress={handleSaveDateUser} style={styles.pressable}>
+        <Text style={styles.pressableText}>Guardar Cambios</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -136,7 +145,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderRadius: 10,
-    marginVertical: 20
+    marginVertical: 20,
   },
 });
 

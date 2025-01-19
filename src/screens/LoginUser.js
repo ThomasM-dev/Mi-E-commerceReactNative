@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../globals/colors';
 import TogglePasswordButton from '../components/TogglePasswordButton';
 import { useLoginMutation } from '../services/AuthApi';
 import loginValidation from '../validation/loginValidation';
-import { useDispatch } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
 
 const LoginUser = () => {
+
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +26,7 @@ const LoginUser = () => {
       const user = {
         email: response.data.email,
         idToken: response.data.idToken,
+        localId: response.data.localId,
       };
       dispatch(setUser(user));
     } catch (error) {
@@ -41,6 +43,7 @@ const LoginUser = () => {
       }
     }
   };
+
 
   return (
     <View style={styles.container}>
