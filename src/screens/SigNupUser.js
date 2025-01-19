@@ -6,6 +6,7 @@ import TogglePasswordButton from '../components/TogglePasswordButton';
 import { useSigNupMutation } from '../services/AuthApi';
 import { sigNupValidation } from '../validation/sigNupValidation';
 import { useDispatch } from 'react-redux';
+import { setUser } from '../store/slices/userSlice';
 
 const SigNupUser = () => {
   const navigation = useNavigation();
@@ -20,8 +21,8 @@ const SigNupUser = () => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
+    setErrors({});
     try {
-      setErrors({});
       setLoading(true);
       await sigNupValidation.validate({ email, password, confirmPassword });
       const response = await triggerSigNup({ email, password });
@@ -30,19 +31,20 @@ const SigNupUser = () => {
         idToken: response.data.idToken,
       };
       dispatch(setUser(user));
-      navigation.navigate('TabNavigator');
     } catch (error) {
-      if (error.name === 'ValidationError') {
-        setErrors({ [error.path]: error.message });
-      } else if (error.response && error.response.data) {
-        const serverMessage =
-          error.response.data.message || 'Error desconocido';
-        setErrors({ general: serverMessage });
-      } else {
-        setErrors({
-          general: 'Error en el registro. Por favor, inténtalo nuevamente.',
-        });
-        console.error('Error inesperado:', error);
+      switch (error.path) {
+        case 'email':
+          setErrors({ email: error.message });
+          break;
+        case 'password':
+          setErrors({ password: error.message });
+          break;
+        case 'confirmPassword':
+          setErrors({ confirmPassword: error.message });
+          break;
+        default:
+          setErrors({ general: 'Ocurrió un error inesperado' });
+          break;
       }
     } finally {
       setLoading(false);
@@ -108,7 +110,7 @@ const SigNupUser = () => {
       <Pressable
         style={[
           styles.registerButton,
-          loading && styles.registerButtonDisabled, 
+          loading && styles.registerButtonDisabled,
         ]}
         onPress={loading ? null : onSubmit}
         disabled={loading}
@@ -203,17 +205,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.red,
     padding: 15,
     borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   registerButtonDisabled: {
-    backgroundColor: "#a0a0a0", 
+    backgroundColor: '#a0a0a0',
     opacity: 0.6,
   },
   registerButtonText: {
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

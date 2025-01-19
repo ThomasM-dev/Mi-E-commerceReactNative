@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import {Pressable,StyleSheet,Text,TextInput,View} from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../globals/colors';
 import TogglePasswordButton from '../components/TogglePasswordButton';
 import { useLoginMutation } from '../services/AuthApi';
 import loginValidation from '../validation/loginValidation';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/slices/userSlice';
 
 const LoginUser = () => {
   const navigation = useNavigation();
@@ -12,21 +14,31 @@ const LoginUser = () => {
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errors, setErrors] = useState({});
-  const [triggerLogin] = useLoginMutation()
+  const [triggerLogin] = useLoginMutation();
+  const dispatch = useDispatch();
 
   const onSubmit = async () => {
+    setErrors({});
     try {
-      setErrors({});
       await loginValidation.validate({ email, password });
-      const response = await triggerLogin({ email, password }).unwrap();
-      console.log("Inicio de sesión exitoso:", response);
-      navigation.navigate("ProfileUser")
+      const response = await triggerLogin({ email, password });
+      const user = {
+        email: response.data.email,
+        idToken: response.data.idToken,
+      };
+      dispatch(setUser(user));
     } catch (error) {
-      if (error.name === "ValidationError") {
-        setErrors({ [error.path]: error.message });
-      } else if (error.data) {
-        setErrors({ api: error.data.error.message });
-      } 
+      if (error.path) {
+        switch (error.path) {
+          case 'email':
+            setErrors({ email: error.message });
+            break;
+          case 'password':
+            setErrors({ password: error.message });
+        }
+      } else if (error.response) {
+        console.log(error);
+      }
     }
   };
 
@@ -61,7 +73,9 @@ const LoginUser = () => {
             onPress={() => setPasswordVisible(!passwordVisible)}
           />
         </View>
-        {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+        )}
       </View>
 
       {errors.api && <Text style={styles.errorText}>{errors.api}</Text>}

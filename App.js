@@ -1,11 +1,8 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import { colors } from './src/globals/colors';
 import Navigation from './src/navigation/Navigation';
 import Store from './src/store/Store';
 import { Provider } from 'react-redux';
-import ProfileUser from './src/screens/ProfileUser';
-import LocationSelector from './src/components/LocationSelector';
+
 
 export default function App() {
   return (
