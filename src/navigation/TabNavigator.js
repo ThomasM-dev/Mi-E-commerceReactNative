@@ -52,7 +52,7 @@ const TabNavigator = () => {
       />
 
       <Tab.Screen
-        name="Mi perfil"
+        name="Perfil"
         component={StackProfile}
         options={{
           tabBarIcon: ({ focused }) => (

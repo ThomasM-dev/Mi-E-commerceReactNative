@@ -1,59 +1,114 @@
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, Text, Pressable, ScrollView } from 'react-native';
 import * as Location from 'expo-location';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { api_geocode_key } from '../data/ApiPost';
+import CustomInput from './CustomInput';
 
 const LocationSelector = () => {
-  const [position, setPosition] = useState({long: "", lat: ""})
+  const [position, setPosition] = useState({ lat: '', long: '' });
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [height, setHeight] = useState('');
+  const [street, setStreet] = useState('');
+  const [loadingLocation, setLoadingLocation] = useState(false);
 
-  const handleLocation = async () => { 
-    let {status} = await Location.requestForegroundPermissionsAsync()
+
+  const handleLocation = async () => {
+    setLoadingLocation(true)
+    let { status } = await Location.requestForegroundPermissionsAsync();
     if (status === 'granted') {
-      let location = await Location.getCurrentPositionAsync({})
-      console.log(location)
+      let location = await Location.getCurrentPositionAsync({});
       setPosition({
         lat: location.coords.latitude,
-        long: location.coords.longitude
-      })
+        long: location.coords.longitude,
+      });
     } else {
       console.log('Permiso denegado');
     }
+    setLoadingLocation(false);
+  };
+
+  useEffect(() => {
+    if (position.lat && position.long) {
+      const addressUser = `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}&format=json&`;
+      (async () => {
+        try {
+          const response = await fetch(addressUser);
+          const data = await response.json();
+          console.log('Dirección obtenida:', data);
+          setCity(data.address.city || '');
+          setCountry(data.address.country || '');
+          setPostalCode(data.address.postcode || '');
+          setStreet(data.address.road || '');
+          setHeight(data.address.house_number || '');
+        } catch (error) {
+          console.error('Error al obtener la dirección:', error);
+        }
+      })();
+    }
+  }, [position]);
+
+  const handleSave = () => {
+    const address = { city, country, postalCode, height, street };
+    console.log('Dirección guardada:', address);
   };
 
   return (
-    <View style={styles.addressSection}>
-      <Pressable onPress={handleLocation} style={styles.buttonAddress}>
-        <Text style={styles.buttonText}>Usar mi ubicación</Text>
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Dirección de Entrega</Text>
+      <CustomInput placeholder="Ciudad" value={city} onChangeText={setCity} />
+      <CustomInput
+        placeholder="País"
+        value={country}
+        onChangeText={setCountry}
+      />
+      <CustomInput
+        placeholder="Código Postal"
+        value={postalCode}
+        onChangeText={setPostalCode}
+      />
+      <CustomInput
+        placeholder="Altura"
+        value={height}
+        onChangeText={setHeight}
+      />
+      <CustomInput
+        placeholder="Calle"
+        value={street}
+        onChangeText={setStreet}
+      />
+
+      <Pressable onPress={handleLocation} style={styles.button}>
+      <Text style={styles.buttonText}>{loadingLocation ? 'Cargando ubicación...' : 'Usar mi ubicación'}</Text>
       </Pressable>
-      <Text style={styles.sectionTitle}>Dirección de Entrega</Text>
-      <Pressable style={styles.buttonAddress}> 
-      <Text style={styles.buttonText}>Guardar</Text>
+
+      <Pressable onPress={handleSave} style={styles.button}>
+        <Text style={styles.buttonText}>Guardar</Text>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  addressSection: {
-    backgroundColor: '#f5f5f5',
-    width: '90%',
+  container: {
     padding: 20,
+    backgroundColor: '#f5f5f5',
     borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 20,
+    width: '90%',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
-  sectionTitle: {
-    fontSize: 20,
+  title: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 15,
+    marginBottom: 20,
     textAlign: 'center',
   },
-  buttonAddress: {
+  button: {
     backgroundColor: '#007BFF',
     paddingVertical: 10,
     paddingHorizontal: 20,

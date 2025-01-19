@@ -4,7 +4,10 @@ import ProfileUser from "../screens/ProfileUser"
 const StackProfile = () => {
     const Stack = createNativeStackNavigator()
     return (
-        <Stack.Navigator>
+        <Stack.Navigator
+            screenOptions={{
+            headerShown: false
+        }}>
             <Stack.Screen name="ProfileUser" component={ProfileUser} />
         </Stack.Navigator>
     )
