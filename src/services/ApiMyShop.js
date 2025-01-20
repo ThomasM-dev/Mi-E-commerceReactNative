@@ -1,16 +1,18 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const ApiMyShop = createApi({
-  reducerPath: "ApiMyShop",  
+  reducerPath: 'ApiMyShop',
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://ecommerce-react-native-feffd-default-rtdb.firebaseio.com/",  
+    baseUrl:
+      'https://ecommerce-react-native-feffd-default-rtdb.firebaseio.com/',
   }),
   endpoints: (builder) => ({
     getCategory: builder.query({
-      query: () => "products.json", 
+      query: () => 'products.json',
     }),
     getProductsByCategory: builder.query({
-        query: (categorySelected) => `products.json?orderBy="category"&equalTo="${categorySelected}"`,
+      query: (categorySelected) =>
+        `products.json?orderBy="category"&equalTo="${categorySelected}"`,
     }),
   }),
 });

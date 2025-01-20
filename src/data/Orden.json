@@ -1,60 +1,59 @@
 [
-    {
-      "id": "ORD001",
-      "estado": "En preparación",
-      "fecha": 1709059200,
-      "productos": [
-        {
-          "nombre": "Hamburguesa Doble",
-          "imagen": "https://via.placeholder.com/150/0000FF?text=Hamburguesa"
-        },
-        {
-          "nombre": "Papas Fritas",
-          "imagen": "https://via.placeholder.com/150/FF0000?text=Papas"
-        },
-        {
-          "nombre": "Malteada de Chocolate",
-          "imagen": "https://via.placeholder.com/150/00FF00?text=Malteada"
-        }
-      ]
-    },
-    {
-      "id": "ORD002",
-      "estado": "Completado",
-      "fecha": 1708972800,
-      "productos": [
-        {
-          "nombre": "Pizza Margarita",
-          "imagen": "https://via.placeholder.com/150/0000FF?text=Pizza"
-        },
-        {
-          "nombre": "Aros de Cebolla",
-          "imagen": "https://via.placeholder.com/150/FF0000?text=Aros"
-        },
-        {
-          "nombre": "Refresco Cola",
-          "imagen": "https://via.placeholder.com/150/00FF00?text=Refresco"
-        }
-      ]
-    },
-    {
-      "id": "ORD003",
-      "estado": "Pendiente",
-      "fecha": 1708886400,
-      "productos": [
-        {
-          "nombre": "Taco al Pastor",
-          "imagen": "https://via.placeholder.com/150/0000FF?text=Taco"
-        },
-        {
-          "nombre": "Quesadilla",
-          "imagen": "https://via.placeholder.com/150/FF0000?text=Quesadilla"
-        },
-        {
-          "nombre": "Agua de Jamaica",
-          "imagen": "https://via.placeholder.com/150/00FF00?text=Jamaica"
-        }
-      ]
-    }
-  ]
-  
+  {
+    "id": "ORD001",
+    "estado": "En preparación",
+    "fecha": 1709059200,
+    "productos": [
+      {
+        "nombre": "Hamburguesa Doble",
+        "imagen": "https://via.placeholder.com/150/0000FF?text=Hamburguesa"
+      },
+      {
+        "nombre": "Papas Fritas",
+        "imagen": "https://via.placeholder.com/150/FF0000?text=Papas"
+      },
+      {
+        "nombre": "Malteada de Chocolate",
+        "imagen": "https://via.placeholder.com/150/00FF00?text=Malteada"
+      }
+    ]
+  },
+  {
+    "id": "ORD002",
+    "estado": "Completado",
+    "fecha": 1708972800,
+    "productos": [
+      {
+        "nombre": "Pizza Margarita",
+        "imagen": "https://via.placeholder.com/150/0000FF?text=Pizza"
+      },
+      {
+        "nombre": "Aros de Cebolla",
+        "imagen": "https://via.placeholder.com/150/FF0000?text=Aros"
+      },
+      {
+        "nombre": "Refresco Cola",
+        "imagen": "https://via.placeholder.com/150/00FF00?text=Refresco"
+      }
+    ]
+  },
+  {
+    "id": "ORD003",
+    "estado": "Pendiente",
+    "fecha": 1708886400,
+    "productos": [
+      {
+        "nombre": "Taco al Pastor",
+        "imagen": "https://via.placeholder.com/150/0000FF?text=Taco"
+      },
+      {
+        "nombre": "Quesadilla",
+        "imagen": "https://via.placeholder.com/150/FF0000?text=Quesadilla"
+      },
+      {
+        "nombre": "Agua de Jamaica",
+        "imagen": "https://via.placeholder.com/150/00FF00?text=Jamaica"
+      }
+    ]
+  }
+]

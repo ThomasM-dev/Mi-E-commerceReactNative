@@ -1,17 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const profileSlice = createSlice({
-  name: "profile",
+  name: 'profile',
   initialState: {
     image: null,
   },
   reducers: {
     changeImage: (state, action) => {
-    state.image = action.payload; 
+      state.image = action.payload;
     },
-},
+  },
 });
 
-export const { changeImage} = profileSlice.actions;
+export const { changeImage } = profileSlice.actions;
 
 export default profileSlice;

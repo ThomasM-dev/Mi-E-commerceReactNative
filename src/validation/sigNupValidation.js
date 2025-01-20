@@ -1,4 +1,4 @@
-import { object, string, ref } from "yup";
+import { object, string, ref } from 'yup';
 
 export const sigNupValidation = object({
   confirmPassword: string()
@@ -12,7 +12,7 @@ export const sigNupValidation = object({
       'La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número'
     )
     .required('La contraseña es obligatoria'),
-    email: string()
+  email: string()
     .email('Debe ser un correo válido')
     .required('El correo es obligatorio'),
 });

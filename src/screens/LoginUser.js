@@ -5,11 +5,10 @@ import { colors } from '../globals/colors';
 import TogglePasswordButton from '../components/TogglePasswordButton';
 import { useLoginMutation } from '../services/AuthApi';
 import loginValidation from '../validation/loginValidation';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
 
 const LoginUser = () => {
-
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,7 +42,6 @@ const LoginUser = () => {
       }
     }
   };
-
 
   return (
     <View style={styles.container}>
