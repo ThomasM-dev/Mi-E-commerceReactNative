@@ -17,13 +17,42 @@ export const init = async () => {
   }
 };
 
-export const insertSession = () => {
+export const insertSession = async (localId, email, idToken) => {
   try {
-    const db = await SQLite.openDatabaseAsync("session.db")
-    const newSession = 
-  } catch (error) {}
+    const db = await SQLite.openDatabaseAsync('session.db');
+    const newSession = await db.runAsync(
+      `
+      INSERT INTO sessionUser (localId, email, idToken) VALUES (?, ?, ?)`,
+      [localId, email, idToken]
+);
+    return newSession;
+  } catch (error) {
+    return error
+  }
 };
 
-export const fetchSession = () => {};
+export const fetchSession = async () => {
+  try {
+    const db = await SQLite.openDatabaseAsync('session.db');
+    const sessionUSer = await db.getFirstAsync(
+      `
+      SELECT * FROM sessionUser`,
+);
+    return sessionUSer;
 
-export const deleteSession = () => {};
+  } catch (error) {
+    return error
+  }
+};
+
+export const deleteSession = async () => {
+  try {
+    const db = await SQLite.openDatabaseAsync('session.db');
+    const deleteSession = await db.runAsync(
+      `DELETE FROM sessionUser`
+    );
+    return deleteSession;
+  } catch (error) {
+    return error;
+  }
+};

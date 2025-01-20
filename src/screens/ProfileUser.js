@@ -65,6 +65,10 @@ const ProfileUser = ({ address }) => {
     console.log('datos del usuario', addressUser, emailUser, imageProfile);
   };
 
+  const handleLogout = () => {
+    console.log('Cerrar sesión');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.profileSection}>
@@ -90,6 +94,9 @@ const ProfileUser = ({ address }) => {
       <Pressable onPress={handleSaveDateUser} style={styles.pressable}>
         <Text style={styles.pressableText}>Guardar Cambios</Text>
       </Pressable>
+      <Pressable onPress={handleLogout} style={[styles.pressable, styles.logoutButton]}>
+        <Text style={styles.pressableText}>Cerrar Sesión</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -97,7 +104,7 @@ const ProfileUser = ({ address }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f0f0f0',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 30,
@@ -105,11 +112,19 @@ const styles = StyleSheet.create({
   profileSection: {
     alignItems: 'center',
     marginBottom: 40,
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   imgProfile: {
     height: 170,
     width: 170,
-    borderRadius: 75,
+    borderRadius: 85,
     marginBottom: 20,
   },
   textProfile: {
@@ -131,6 +146,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     marginHorizontal: 10,
+    marginTop: 20,
   },
   pressableText: {
     color: '#fff',
@@ -146,6 +162,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginVertical: 20,
+    backgroundColor: '#e0e0e0',
+  },
+  logoutButton: {
+    backgroundColor: '#dc3545',
   },
 });
 

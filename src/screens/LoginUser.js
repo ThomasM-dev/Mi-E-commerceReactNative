@@ -7,6 +7,7 @@ import { useLoginMutation } from '../services/AuthApi';
 import loginValidation from '../validation/loginValidation';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
+import { insertSession } from '../config/dbSqlLite';
 
 const LoginUser = () => {
   const navigation = useNavigation();
@@ -28,6 +29,7 @@ const LoginUser = () => {
         localId: response.data.localId,
       };
       dispatch(setUser(user));
+      insertSession(user.localId, user.email, user.idToken)
     } catch (error) {
       if (error.path) {
         switch (error.path) {

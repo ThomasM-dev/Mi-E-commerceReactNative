@@ -6,15 +6,7 @@ import { init } from './src/config/dbSqlLite';
 import { useEffect } from 'react';
 
 export default function App() {
-  useEffect(() => {
-    init()
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        console.error('Error al inicializar la base de datos:', error);
-      });
-  }, []);
+  init();
 
   return (
     <Provider store={Store}>
