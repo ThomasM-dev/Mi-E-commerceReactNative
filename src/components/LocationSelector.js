@@ -5,6 +5,7 @@ import { api_geocode_key } from '../data/ApiPost';
 import CustomInput from './CustomInput';
 import { useDispatch } from 'react-redux';
 import { setAddress } from '../store/slices/addressSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LocationSelector = () => {
   const [position, setPosition] = useState({ lat: '', long: '' });
@@ -15,6 +16,21 @@ const LocationSelector = () => {
   const [street, setStreet] = useState('');
   const [loadingLocation, setLoadingLocation] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchStoredAddress = async () => {
+      const address = await AsyncStorage.getItem('userAddress');
+      if (address) {
+        const parsedAddress = JSON.parse(address);
+        setCity(parsedAddress.city);
+        setCountry(parsedAddress.country);
+        setPostalCode(parsedAddress.postalCode);
+        setStreet(parsedAddress.street);
+        setHeight(parsedAddress.height);
+      }
+    };
+    fetchStoredAddress();
+  }, []);
 
   const handleLocation = async () => {
     setLoadingLocation(true);
