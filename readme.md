@@ -15,8 +15,8 @@ MiE-commerce es una aplicación móvil desarrollada con React Native que permite
 
 ### Pantalla de Perfil
 
-![Pantalla de Perfil]("assets/Screenshot_1737558016.png")
+<img src="assets/Screenshot_1737558016.png">
 
 ### Home
 
-![Selección de Ubicación]("assets/Screenshot_1737558020.png")
+<img src="assets/Screenshot_1737558020.png">
