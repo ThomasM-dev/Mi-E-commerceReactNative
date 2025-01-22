@@ -1,9 +1,9 @@
-import { StyleSheet, Text, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Text, Pressable, ScrollView, View } from 'react-native';
 import * as Location from 'expo-location';
 import { useState, useEffect } from 'react';
 import { api_geocode_key } from '../data/ApiPost';
 import CustomInput from './CustomInput';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAddress } from '../store/slices/addressSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -16,10 +16,11 @@ const LocationSelector = () => {
   const [street, setStreet] = useState('');
   const [loadingLocation, setLoadingLocation] = useState(false);
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.user.localId);
 
   useEffect(() => {
     const fetchStoredAddress = async () => {
-      const address = await AsyncStorage.getItem('userAddress');
+      const address = await AsyncStorage.getItem(`userAddress_${userId}`);
       if (address) {
         const parsedAddress = JSON.parse(address);
         setCity(parsedAddress.city);
@@ -30,84 +31,67 @@ const LocationSelector = () => {
       }
     };
     fetchStoredAddress();
-  }, []);
+  }, [userId]);
 
-  const handleLocation = async () => {
+  const handleSaveAddress = async () => {
+    const address = { city, country, postalCode, street, height };
+    try {
+      await AsyncStorage.setItem(`userAddress_${userId}`, JSON.stringify(address));
+      dispatch(setAddress(address));
+    } catch (error) {
+      console.error('Error al guardar la dirección en AsyncStorage', error);
+    }
+  };
+
+  const handleGetLocation = async () => {
     setLoadingLocation(true);
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status === 'granted') {
-      let location = await Location.getCurrentPositionAsync({});
-      setPosition({
-        lat: location.coords.latitude,
-        long: location.coords.longitude,
-      });
-    } else {
-      console.log('Permiso denegado');
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permiso denegado', 'No se concedió permiso para acceder a la ubicación.');
+        setLoadingLocation(false);
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+      setPosition({ lat: latitude, long: longitude });
+
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${api_geocode_key}`
+      );
+      const data = await response.json();
+      if (data.results.length > 0) {
+        const addressComponents = data.results[0].address_components;
+        setCity(addressComponents.find((comp) => comp.types.includes('locality'))?.long_name || '');
+        setCountry(addressComponents.find((comp) => comp.types.includes('country'))?.long_name || '');
+        setPostalCode(addressComponents.find((comp) => comp.types.includes('postal_code'))?.long_name || '');
+        setStreet(addressComponents.find((comp) => comp.types.includes('route'))?.long_name || '');
+        setHeight(addressComponents.find((comp) => comp.types.includes('street_number'))?.long_name || '');
+      }
+    } catch (error) {
+      console.error('Error al obtener la ubicación', error);
+    } finally {
+      setLoadingLocation(false);
     }
-    setLoadingLocation(false);
   };
 
-  useEffect(() => {
-    if (position.lat && position.long) {
-      const addressUser = `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}&format=json&`;
-      (async () => {
-        try {
-          const response = await fetch(addressUser);
-          const data = await response.json();
-          setCity(data.address.city || '');
-          setCountry(data.address.country || '');
-          setPostalCode(data.address.postcode || '');
-          setStreet(data.address.road || '');
-          setHeight(data.address.house_number || '');
-        } catch (error) {
-          console.error('Error al obtener la dirección:', error);
-        }
-      })();
-    }
-  }, [position]);
-
-  const handleSaveAddress = () => {
-    const address = {
-      city,
-      country,
-      postalCode,
-      street,
-      height,
-    };
-    dispatch(setAddress(address));
-  };
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Dirección de Entrega</Text>
-      <CustomInput placeholder="Ciudad" value={city} onChangeText={setCity} />
-      <CustomInput
-        placeholder="País"
-        value={country}
-        onChangeText={setCountry}
-      />
-      <CustomInput
-        placeholder="Código Postal"
-        value={postalCode}
-        onChangeText={setPostalCode}
-      />
-      <CustomInput
-        placeholder="Altura"
-        value={height}
-        onChangeText={setHeight}
-      />
-      <CustomInput
-        placeholder="Calle"
-        value={street}
-        onChangeText={setStreet}
-      />
-
-      <Pressable onPress={handleLocation} style={styles.button}>
-        <Text style={styles.buttonText}>
-          {loadingLocation ? 'Cargando ubicación...' : 'Usar mi ubicación'}
+      <View style={styles.inputContainer}>
+        <CustomInput label="Ciudad" value={city} onChangeText={setCity} />
+        <CustomInput label="País" value={country} onChangeText={setCountry} />
+        <CustomInput label="Código Postal" value={postalCode} onChangeText={setPostalCode} />
+        <CustomInput label="Calle" value={street} onChangeText={setStreet} />
+        <CustomInput label="Altura" value={height} onChangeText={setHeight} />
+      </View>
+      <Pressable onPress={handleGetLocation} style={styles.locationButton}>
+        <Text style={styles.locationButtonText}>
+          {loadingLocation ? 'Obteniendo ubicación...' : 'Obtener Ubicación'}
         </Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={handleSaveAddress}>
-        <Text style={styles.buttonText}>Guardar ubicación</Text>
+      <Pressable onPress={handleSaveAddress} style={styles.saveButton}>
+        <Text style={styles.saveButtonText}>Guardar Dirección</Text>
       </Pressable>
     </ScrollView>
   );
@@ -115,34 +99,35 @@ const LocationSelector = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 10,
-    width: '90%',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
+  inputContainer: {
     marginBottom: 20,
-    textAlign: 'center',
   },
-  button: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 25,
-    marginTop: 10,
+  locationButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
   },
-  buttonText: {
+  locationButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  saveButton: {
+    backgroundColor: '#28a745',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

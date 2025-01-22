@@ -1,32 +1,41 @@
 import {
+  ScrollView,
   View,
   Text,
   StyleSheet,
   Image,
   Pressable,
   Alert,
-  ScrollView,
 } from 'react-native';
 import ProfileImgDefault from '../../assets/profileImg.webp';
 import * as ImagePicker from 'expo-image-picker';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import LocationSelector from '../components/LocationSelector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { deleteSession } from '../config/dbSqlLite';
+import { clearUser } from '../store/slices/userSlice';
 
 const ProfileUser = () => {
+  const dispatch = useDispatch();
   const emailUser = useSelector((state) => state.user.email);
+  const userId = useSelector((state) => state.user.localId);
   const addressUser = useSelector((state) => state.addressUser.address);
-  const [imgProfile, setIMgProfile] = useState(null);
+  const [imgProfile, setIMgProfile] = useState(ProfileImgDefault);
 
   useEffect(() => {
     const fetchProfileDataUser = async () => {
-      const image = await AsyncStorage.getItem('userImage');
-      setIMgProfile(image || ProfileImgDefault);
+      try {
+        const image = await AsyncStorage.getItem(`userImage_${userId}`);
+        setIMgProfile(image || ProfileImgDefault);
+      } catch (error) {
+        console.error('Error al cargar la imagen de perfil', error);
+        setIMgProfile(ProfileImgDefault);
+      }
     };
+
     fetchProfileDataUser();
-  }, []);
+  }, [userId]);
 
   const permissionCamera = async (permissionType) => {
     const { status } =
@@ -37,7 +46,7 @@ const ProfileUser = () => {
     if (status !== 'granted') {
       Alert.alert(
         'Permiso denegado',
-        `No se pudo acceder a la ${permissionType}.`
+        'No se concedió permiso para acceder a la cámara o galería.'
       );
       return false;
     }
@@ -45,27 +54,16 @@ const ProfileUser = () => {
   };
 
   const handleChangeImage = async (sourceType) => {
-    const permissionGranted = await permissionCamera(sourceType);
-    if (!permissionGranted) return;
-    let data;
-    if (sourceType === 'camera') {
-      data = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [9, 16],
-        base64: true,
-        quality: 1,
-      });
-    } else {
-      data = await ImagePicker.launchImageLibraryAsync({
-        base64: true,
-        allowsEditing: true,
-        quality: 1,
-        aspect: [9, 16],
-      });
-    }
+    const hasPermission = await permissionCamera(sourceType);
+    if (!hasPermission) return;
 
-    if (!data.canceled && data.assets?.[0]?.base64) {
-      const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
+    const result =
+      sourceType === 'camera'
+        ? await ImagePicker.launchCameraAsync({ base64: true })
+        : await ImagePicker.launchImageLibraryAsync({ base64: true });
+
+    if (!result.canceled && result.assets?.[0]?.base64) {
+      const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
       setIMgProfile(base64Image);
     } else {
       Alert.alert('Error', 'No se seleccionó una imagen válida.');
@@ -74,9 +72,15 @@ const ProfileUser = () => {
 
   const saveProfileData = async () => {
     try {
-      await AsyncStorage.setItem('userImage', imgProfile);
-      await AsyncStorage.setItem('userAddress', JSON.stringify(addressUser));
-      Alert.alert('Éxito', 'Los datos se han guardadoc correctamente.');
+      await AsyncStorage.setItem(
+        `userImage_${userId}`,
+        JSON.stringify(imgProfile)
+      );
+      await AsyncStorage.setItem(
+        `userAddress_${userId}`,
+        JSON.stringify(addressUser)
+      );
+      Alert.alert('Éxito', 'Los datos se han guardado correctamente.');
     } catch (error) {
       console.error('Error al guardar datos en AsyncStorage', error);
       Alert.alert('Error', 'Hubo un problema al guardar los datos.');
@@ -84,18 +88,21 @@ const ProfileUser = () => {
   };
 
   const handleLogout = async () => {
-    const result = await deleteSession();
-    if (result.success) {
-      Alert.alert('Sesión cerrada', 'Has cerrado sesión correctamente.');
-    } else {
-      Alert.alert('Error', 'Hubo un problema al cerrar sesión.');
+    try {
+      await AsyncStorage.removeItem(`userImage_${userId}`);
+      await AsyncStorage.removeItem(`userAddress_${userId}`);
+      await deleteSession();
+      dispatch(clearUser());
+    } catch (error) {
+      console.error('Error al cerrar sesión', error);
     }
   };
+
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profileSection}>
-        <Image source={{ uri: imgProfile }} style={styles.imgProfile} />
+        <Image source={ProfileImgDefault} style={styles.imgProfile} />
         <View style={styles.buttonsImageProfile}>
           <Pressable
             style={[styles.pressable, styles.cameraButton]}
@@ -132,6 +139,7 @@ const ProfileUser = () => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
