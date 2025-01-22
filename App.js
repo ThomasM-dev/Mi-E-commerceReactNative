@@ -5,8 +5,6 @@ import { Provider } from 'react-redux';
 import { init } from './src/config/dbSqlLite';
 
 export default function App() {
-  init();
-
   return (
     <Provider store={Store}>
       <View style={styles.container}>

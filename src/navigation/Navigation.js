@@ -3,7 +3,7 @@ import TabNavigator from './TabNavigator';
 import AuthStack from './AuthStack ';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchSession } from '../config/dbSqlLite';
+import { fetchSession, init } from '../config/dbSqlLite';
 import { setUser } from '../store/slices/userSlice';
 
 const Navigation = () => {
@@ -12,6 +12,7 @@ const Navigation = () => {
 
   useEffect(() => {
     (async () => {
+      await init()
       const sessionUser = await fetchSession();
       dispatch(setUser(sessionUser));
     })();
