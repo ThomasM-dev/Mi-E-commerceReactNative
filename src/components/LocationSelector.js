@@ -35,7 +35,6 @@ const LocationSelector = () => {
     const address = { city, country, postalCode, street, height };
     try {
       await AsyncStorage.setItem(`userAddress_${userId}`, JSON.stringify(address));
-      dispatch(setAddress(address));
     } catch (error) {
       console.error('Error al guardar la dirección en AsyncStorage', error);
     }
