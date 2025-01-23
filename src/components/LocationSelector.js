@@ -3,8 +3,7 @@ import * as Location from 'expo-location';
 import { useState, useEffect } from 'react';
 import { api_geocode_key } from '../data/ApiPost';
 import CustomInput from './CustomInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAddress } from '../store/slices/addressSlice';
+import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LocationSelector = () => {
@@ -15,7 +14,6 @@ const LocationSelector = () => {
   const [height, setHeight] = useState('');
   const [street, setStreet] = useState('');
   const [loadingLocation, setLoadingLocation] = useState(false);
-  const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.localId);
 
   useEffect(() => {
@@ -23,11 +21,11 @@ const LocationSelector = () => {
       const address = await AsyncStorage.getItem(`userAddress_${userId}`);
       if (address) {
         const parsedAddress = JSON.parse(address);
-        setCity(parsedAddress.city);
-        setCountry(parsedAddress.country);
-        setPostalCode(parsedAddress.postalCode);
-        setStreet(parsedAddress.street);
-        setHeight(parsedAddress.height);
+        setCity(parsedAddress.cit || "");
+        setCountry(parsedAddress.country || "");
+        setPostalCode(parsedAddress.postalCode || "");
+        setStreet(parsedAddress.street || "");
+        setHeight(parsedAddress.height || "");
       }
     };
     fetchStoredAddress();
@@ -37,7 +35,6 @@ const LocationSelector = () => {
     const address = { city, country, postalCode, street, height };
     try {
       await AsyncStorage.setItem(`userAddress_${userId}`, JSON.stringify(address));
-      dispatch(setAddress(address));
     } catch (error) {
       console.error('Error al guardar la dirección en AsyncStorage', error);
     }
@@ -58,17 +55,11 @@ const LocationSelector = () => {
       setPosition({ lat: latitude, long: longitude });
 
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${api_geocode_key}`
+        `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}format=json&`
       );
       const data = await response.json();
-      if (data.results.length > 0) {
-        const addressComponents = data.results[0].address_components;
-        setCity(addressComponents.find((comp) => comp.types.includes('locality'))?.long_name || '');
-        setCountry(addressComponents.find((comp) => comp.types.includes('country'))?.long_name || '');
-        setPostalCode(addressComponents.find((comp) => comp.types.includes('postal_code'))?.long_name || '');
-        setStreet(addressComponents.find((comp) => comp.types.includes('route'))?.long_name || '');
-        setHeight(addressComponents.find((comp) => comp.types.includes('street_number'))?.long_name || '');
-      }
+      console.log(data);
+      
     } catch (error) {
       console.error('Error al obtener la ubicación', error);
     } finally {

@@ -5,13 +5,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeImage } from '../store/slices/profileSlice';
 import LocationSelector from '../components/LocationSelector';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
-const ProfileUser = ({ address }) => {
+const ProfileUser = () => {
   const dispatch = useDispatch();
   const imageProfile = useSelector((state) => state.profile.image);
   const emailUser = useSelector((state) => state.user.email);
-  const addressUser = useSelector((state) => state.addressUser.address);
 
+  useEffect(() => {
+    const imageUser = async () => {
+      const image = await AsyncStorage.getItem(`userImage_${emailUser}`);
+      if (image) {
+        dispatch(changeImage(image));
+      } else {
+        dispatch(changeImage(ProfileImgDefault))
+      }
+    }
+    imageUser()
+  }, [imageProfile, emailUser])
+  
   const handleChangeImageCamera = async () => {
     try {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -62,7 +75,7 @@ const ProfileUser = ({ address }) => {
   };
 
   const handleSaveDateUser = () => {
-    console.log('datos del usuario', addressUser, emailUser, imageProfile);
+    AsyncStorage.setItem(`userImage_${emailUser}`, imageProfile);
   };
 
   return (
