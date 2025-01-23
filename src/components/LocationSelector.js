@@ -35,6 +35,7 @@ const LocationSelector = () => {
     const address = { city, country, postalCode, street, height };
     try {
       await AsyncStorage.setItem(`userAddress_${userId}`, JSON.stringify(address));
+      dispatch(setAddress(address));
     } catch (error) {
       console.error('Error al guardar la dirección en AsyncStorage', error);
     }
@@ -45,7 +46,10 @@ const LocationSelector = () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Permiso denegado', 'No se concedió permiso para acceder a la ubicación.');
+        Alert.alert(
+          'Permiso denegado',
+          'No se concedió permiso para acceder a la ubicación.'
+        );
         setLoadingLocation(false);
         return;
       }
@@ -58,8 +62,14 @@ const LocationSelector = () => {
         `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}format=json&`
       );
       const data = await response.json();
-      console.log(data);
-      
+      if (data.results.length > 0) {
+        const addressComponents = data.results[0].address_components;
+        setCity(addressComponents.find((comp) => comp.types.includes('locality'))?.long_name || '');
+        setCountry(addressComponents.find((comp) => comp.types.includes('country'))?.long_name || '');
+        setPostalCode(addressComponents.find((comp) => comp.types.includes('postal_code'))?.long_name || '');
+        setStreet(addressComponents.find((comp) => comp.types.includes('route'))?.long_name || '');
+        setHeight(addressComponents.find((comp) => comp.types.includes('street_number'))?.long_name || '');
+      }
     } catch (error) {
       console.error('Error al obtener la ubicación', error);
     } finally {
@@ -72,7 +82,11 @@ const LocationSelector = () => {
       <View style={styles.inputContainer}>
         <CustomInput label="Ciudad" value={city} onChangeText={setCity} />
         <CustomInput label="País" value={country} onChangeText={setCountry} />
-        <CustomInput label="Código Postal" value={postalCode} onChangeText={setPostalCode} />
+        <CustomInput
+          label="Código Postal"
+          value={postalCode}
+          onChangeText={setPostalCode}
+        />
         <CustomInput label="Calle" value={street} onChangeText={setStreet} />
         <CustomInput label="Altura" value={height} onChangeText={setHeight} />
       </View>

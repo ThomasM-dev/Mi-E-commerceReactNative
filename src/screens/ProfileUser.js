@@ -1,30 +1,23 @@
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
-import ProfileImgDefault from '../../assets/profileImg.webp';
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  Alert,
+} from 'react-native';
+import ProfileImgDefault from '../../assets/profileUserDefault.jpg';
 import * as ImagePicker from 'expo-image-picker';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeImage } from '../store/slices/profileSlice';
+import { useSelector, useDispatch } from 'react-redux';
 import LocationSelector from '../components/LocationSelector';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
 
 const ProfileUser = () => {
   const dispatch = useDispatch();
-  const imageProfile = useSelector((state) => state.profile.image);
   const emailUser = useSelector((state) => state.user.email);
+  const addressUser = useSelector((state) => state.addressUser.address);
 
-  useEffect(() => {
-    const imageUser = async () => {
-      const image = await AsyncStorage.getItem(`userImage_${emailUser}`);
-      if (image) {
-        dispatch(changeImage(image));
-      } else {
-        dispatch(changeImage(ProfileImgDefault))
-      }
-    }
-    imageUser()
-  }, [imageProfile, emailUser])
-  
   const handleChangeImageCamera = async () => {
     try {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -40,7 +33,7 @@ const ProfileUser = () => {
       });
       if (!data.canceled && data.assets?.length > 0 && data.assets[0].base64) {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
-        dispatch(changeImage(base64Image));
+        setImgProfile(base64Image);
       } else {
         console.warn('Captura de imagen cancelada o datos inválidos.');
       }
@@ -65,7 +58,7 @@ const ProfileUser = () => {
       });
       if (!data.canceled && data.assets?.[0]?.base64) {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
-        dispatch(changeImage(base64Image));
+        setImgProfile(base64Image);
       } else {
         console.warn('Selección de imagen cancelada o datos inválidos.');
       }
@@ -75,75 +68,91 @@ const ProfileUser = () => {
   };
 
   const handleSaveDateUser = () => {
-    AsyncStorage.setItem(`userImage_${emailUser}`, imageProfile);
+    console.log('datos del usuario', addressUser, emailUser, imageProfile);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.profileSection}>
-        <Image
-          source={imageProfile ? { uri: imageProfile } : ProfileImgDefault}
-          style={styles.imgProfile}
-        />
+        <Image source={imgProfile} style={styles.imgProfile} />
         <View style={styles.buttonsImageProfile}>
-          <Pressable style={styles.pressable} onPress={handleChangeImageCamera}>
+          <Pressable
+            style={[styles.pressable, styles.cameraButton]}
+            onPress={handleChangeImageCamera}
+          >
             <Text style={styles.pressableText}>Usar cámara</Text>
           </Pressable>
           <Pressable
-            style={styles.pressable}
+            style={[styles.pressable, styles.galleryButton]}
             onPress={handleChangeImageGallery}
           >
             <Text style={styles.pressableText}>Desde galería</Text>
           </Pressable>
         </View>
-        <Text style={styles.textProfile}>Bienvenido, Usuario!</Text>
-        <Text style={styles.emailText}>Correo: {emailUser || 'Usuari@'}</Text>
+        <Text style={styles.textProfile}>Bienvenido, Usuari@!</Text>
+        <Text style={styles.emailText}>
+          Correo: {emailUser || 'No disponible'}
+        </Text>
       </View>
-      <LocationSelector />
-      <Pressable onPress={handleSaveDateUser} style={styles.pressable}>
+      <View style={styles.locationSelectorContainer}>
+        <LocationSelector />
+      </View>
+      <Pressable onPress={saveProfileData} style={styles.pressable}>
         <Text style={styles.pressableText}>Guardar Cambios</Text>
       </Pressable>
-    </SafeAreaView>
+      <Pressable
+        onPress={handleLogout}
+        style={[styles.pressable, styles.logoutButton]}
+      >
+        <Text style={styles.pressableText}>Cerrar Sesión</Text>
+      </Pressable>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    backgroundColor: '#f7f7f7',
     paddingHorizontal: 20,
-    paddingTop: 30,
+    marginVertical: 50,
   },
   profileSection: {
     alignItems: 'center',
     marginBottom: 40,
+    backgroundColor: '#fff',
+    padding: 25,
+    borderRadius: 12,
   },
   imgProfile: {
-    height: 170,
-    width: 170,
-    borderRadius: 75,
+    height: 180,
+    width: 180,
+    borderRadius: 90,
     marginBottom: 20,
+    borderWidth: 3,
+    borderColor: '#007bff',
   },
   textProfile: {
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 10,
+    marginBottom: 12,
     textAlign: 'center',
   },
   emailText: {
     fontSize: 16,
     color: '#555',
-    marginTop: 10,
     textAlign: 'center',
+    marginTop: 5,
   },
   pressable: {
     backgroundColor: '#007bff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 8,
     marginHorizontal: 10,
+    marginTop: 20,
+    elevation: 5,
   },
   pressableText: {
     color: '#fff',
@@ -153,12 +162,30 @@ const styles = StyleSheet.create({
   },
   buttonsImageProfile: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: '100%',
+    padding: 12,
+    justifyContent: 'center',
+    borderRadius: 10,
+    marginVertical: 15,
+  },
+  cameraButton: {
+    backgroundColor: '#28a745',
+  },
+  galleryButton: {
+    backgroundColor: '#ffc107',
+  },
+  logoutButton: {
+    backgroundColor: '#dc3545',
+    marginTop: 20,
+  },
+
+  locationSelectorContainer: {
     alignItems: 'center',
     width: '100%',
-    padding: 10,
-    borderRadius: 10,
-    marginVertical: 20,
+    backgroundColor: '#fff',
+    paddingVertical: 20,
+    marginBottom: 30,
+    borderRadius: 12,
   },
 });
 
