@@ -5,33 +5,32 @@ import {
   StyleSheet,
   Image,
   Pressable,
-  Alert,
-  useEffect,
 } from 'react-native';
-import ProfileImgDefault from '../../assets/profileUserDefault.jpg';
 import * as ImagePicker from 'expo-image-picker';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LocationSelector from '../components/LocationSelector';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { setUser } from '../store/slices/userSlice';
+import { useEffect, useState } from 'react';
+import { deleteSession } from '../config/dbSqlLite';
+import { clearUser } from '../store/slices/userSlice';
 
 const ProfileUser = () => {
   const dispatch = useDispatch();
   const emailUser = useSelector((state) => state.user.email);
-  const localId = useSelector((state) => state.user.localId)
-  const imgProfile = useSelector((state) => state.user.changeImage)
+  const localId = useSelector((state) => state.user.localId);
+  const [imgProfile, setImgProfile] = useState(
+    'https://i.pinimg.com/originals/3b/2e/3d/3b2e3d35f10b6adb795f1aa1bd472c4c.jpg'
+  );
 
-useEffect(() => {
-  const getImgProfile = async () => {
-      const profileUser = await AsyncStorage.getItem(`imageUser_${localId}`)
+  useEffect(() => {
+    const getImgProfile = async () => {
+      const profileUser = await AsyncStorage.getItem(`imageUser_${emailUser}`);
       if (profileUser) {
-        dispatch(setUser({changeImage: profileUser}))
-      } else {
-        dispatch(setUser({changeImage: ProfileImgDefault}))
+        setImgProfile(profileUser); // Update the local state with stored image
       }
-  }
-  getImgProfile();
-}, [localId]);
+    };
+    getImgProfile();
+  }, [localId, emailUser]);
 
   const handleChangeImageCamera = async () => {
     try {
@@ -48,7 +47,7 @@ useEffect(() => {
       });
       if (!data.canceled && data.assets?.length > 0 && data.assets[0].base64) {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
-        dispatch(setUser({changeImage: base64Image}))
+        setImgProfile(base64Image); // Update the local state
       } else {
         console.warn('Captura de imagen cancelada o datos inválidos.');
       }
@@ -73,7 +72,7 @@ useEffect(() => {
       });
       if (!data.canceled && data.assets?.[0]?.base64) {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
-        dispatch(setUser({changeImage: base64Image}))
+        setImgProfile(base64Image); // Update the local state
       } else {
         console.warn('Selección de imagen cancelada o datos inválidos.');
       }
@@ -83,13 +82,18 @@ useEffect(() => {
   };
 
   const handleSaveDateUser = () => {
-    AsyncStorage.setItem(`imageUser_${localId}`, imgProfile);
+    AsyncStorage.setItem(`imageUser_${emailUser}`, imgProfile)
+  };
+
+  const handleLogout = async () => {
+    dispatch(clearUser());
+    await deleteSession();
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profileSection}>
-        <Image source={imgProfile} style={styles.imgProfile} />
+        <Image source={{ uri: imgProfile }} style={styles.imgProfile} />
         <View style={styles.buttonsImageProfile}>
           <Pressable
             style={[styles.pressable, styles.cameraButton]}

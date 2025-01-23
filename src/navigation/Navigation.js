@@ -12,11 +12,11 @@ const Navigation = () => {
 
   useEffect(() => {
     (async () => {
-      await init()
+      await init();
       const sessionUser = await fetchSession();
       dispatch(setUser(sessionUser));
     })();
-  }, [dispatch]); 
+  }, [dispatch]);
 
   return (
     <NavigationContainer>

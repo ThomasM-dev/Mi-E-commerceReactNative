@@ -6,14 +6,12 @@ const userSlice = createSlice({
     email: '',
     idToken: '',
     localId: '',
-    changeImage: ""
   },
   reducers: {
     setUser: (state, actions) => {
       state.email = actions.payload.email;
       state.idToken = actions.payload.idToken;
       state.localId = actions.payload.localId;
-      state.changeImage = actions.payload.changeImage
     },
     clearUser: (state) => {
       state.email = '';
