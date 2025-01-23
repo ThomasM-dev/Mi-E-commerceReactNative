@@ -3,8 +3,7 @@ import * as Location from 'expo-location';
 import { useState, useEffect } from 'react';
 import { api_geocode_key } from '../data/ApiPost';
 import CustomInput from './CustomInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAddress } from '../store/slices/addressSlice';
+import { useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LocationSelector = () => {
@@ -15,7 +14,6 @@ const LocationSelector = () => {
   const [height, setHeight] = useState('');
   const [street, setStreet] = useState('');
   const [loadingLocation, setLoadingLocation] = useState(false);
-  const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.localId);
 
   useEffect(() => {
@@ -36,8 +34,10 @@ const LocationSelector = () => {
   const handleSaveAddress = async () => {
     const address = { city, country, postalCode, street, height };
     try {
-      await AsyncStorage.setItem(`userAddress_${userId}`, JSON.stringify(address));
-      dispatch(setAddress(address));
+      await AsyncStorage.setItem(
+        `userAddress_${userId}`,
+        JSON.stringify(address)
+      );
     } catch (error) {
       console.error('Error al guardar la dirección en AsyncStorage', error);
     }
@@ -48,7 +48,10 @@ const LocationSelector = () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Permiso denegado', 'No se concedió permiso para acceder a la ubicación.');
+        Alert.alert(
+          'Permiso denegado',
+          'No se concedió permiso para acceder a la ubicación.'
+        );
         setLoadingLocation(false);
         return;
       }
@@ -62,12 +65,11 @@ const LocationSelector = () => {
       );
       const data = await response.json();
       if (data.results.length > 0) {
-        const addressComponents = data.results[0].address_components;
-        setCity(addressComponents.find((comp) => comp.types.includes('locality'))?.long_name || '');
-        setCountry(addressComponents.find((comp) => comp.types.includes('country'))?.long_name || '');
-        setPostalCode(addressComponents.find((comp) => comp.types.includes('postal_code'))?.long_name || '');
-        setStreet(addressComponents.find((comp) => comp.types.includes('route'))?.long_name || '');
-        setHeight(addressComponents.find((comp) => comp.types.includes('street_number'))?.long_name || '');
+        setCity(address.city || '');
+        setCountry(address.country || '');
+        setPostalCode(address.postalCode || '');
+        setStreet(address.street || '');
+        setHeight(address.height || '');
       }
     } catch (error) {
       console.error('Error al obtener la ubicación', error);
@@ -81,7 +83,11 @@ const LocationSelector = () => {
       <View style={styles.inputContainer}>
         <CustomInput label="Ciudad" value={city} onChangeText={setCity} />
         <CustomInput label="País" value={country} onChangeText={setCountry} />
-        <CustomInput label="Código Postal" value={postalCode} onChangeText={setPostalCode} />
+        <CustomInput
+          label="Código Postal"
+          value={postalCode}
+          onChangeText={setPostalCode}
+        />
         <CustomInput label="Calle" value={street} onChangeText={setStreet} />
         <CustomInput label="Altura" value={height} onChangeText={setHeight} />
       </View>
