@@ -1,150 +1,171 @@
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useAddCartMutation } from '../services/userCartApi';
+import { removeItemToCart, clearCart } from '../store/slices/cartSlice';
 import {
-  Text,
   View,
-  Image,
-  StyleSheet,
-  Pressable,
   FlatList,
+  StyleSheet,
+  Image,
+  Text,
+  Pressable,
 } from 'react-native';
 import { colors } from '../globals/colors';
-import { useDispatch, useSelector } from 'react-redux';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import EmptyCart from '../components/EmptyCart';
-import { removeItemToCart } from '../store/slices/cartSlice';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Cart = () => {
-  const productCart = useSelector((state) => state.cartSlice.value.cart);
-  const totalCart = useSelector((state) => state.cartSlice.value.total);
+  const localId = useSelector((state) => state.user.localId);
+  const productCart = useSelector((state) => state.cart.value.cart);
+  const totalCart = useSelector((state) => state.cart.value.total);
+
   const dispatch = useDispatch();
+
+  const [addCart, { isLoading, isSuccess, isError }] = useAddCartMutation();
 
   const handleClickItemRemove = (item) => {
     dispatch(removeItemToCart(item));
   };
 
-  if (productCart.length === 0) {
-    return <EmptyCart />;
-  }
+  if (productCart.length === 0) return <EmptyCart />;
+
+  const handleFinishPurchase = async () => {
+    if (productCart.length === 0) return;
+
+    const cartData = {
+      products: productCart.map((item) => ({
+        id: item.id,
+        title: item.title,
+        count: item.count,
+        totalPrice: item.productxCount,
+        imageUrl: item.imageUrl,
+      })),
+      totalQuantity: productCart.reduce((total, item) => total + item.count, 0),
+      totalPrice: totalCart,
+      purchaseDate: Date.now(),
+    };
+
+    try {
+      await addCart({ localId, cartData }).unwrap();
+      alert('Compra realizada con éxito!');
+      dispatch(clearCart());
+    } catch (error) {
+      console.error('Error al finalizar compra:', error);
+      alert('Hubo un error al guardar tu carrito.');
+    }
+  };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={productCart}
-        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.productCart}>
-            <Image
-              style={styles.imageProduct}
-              source={{ uri: item.imageUrl }}
-            />
-            <View style={styles.containerText}>
-              <Text style={styles.name}>{item.title}</Text>
+          <View style={styles.item}>
+            <Image source={{ uri: item.imageUrl }} style={styles.image} />
+            <View style={styles.itemDetails}>
+              <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.count}>Cantidad: {item.count}</Text>
               <Text style={styles.price}>
-                Precio: ${item.productxCount} ARS
+                Precio total: ${item.productxCount}
               </Text>
             </View>
-            <View style={styles.containerRemoveItem}>
-              <Pressable onPress={() => handleClickItemRemove(item)}>
-                <Ionicons name="trash" size={24} color={colors.red} />
-              </Pressable>
-            </View>
+            <Pressable
+              style={styles.removeButton}
+              onPress={() => handleClickItemRemove(item)}
+            >
+              <Text style={styles.removeButtonText}>Eliminar</Text>
+            </Pressable>
           </View>
         )}
+        keyExtractor={(item) => item.id.toString()}
       />
-      <View style={styles.containerButton}>
-        <Text style={styles.priceTotal}>Total: ${totalCart} ARS</Text>
-        <Pressable style={styles.btnFinish}>
-          <Text style={styles.btnText}>Finalizar Compra</Text>
+      <View style={styles.footer}>
+        <Text style={styles.total}>Total: ${totalCart}</Text>
+        <Pressable style={styles.purchaseButton} onPress={handleFinishPurchase}>
+          <Text style={styles.purchaseButtonText}>Finalizar Compra</Text>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
-    marginTop: 50,
-    width: '100%',
-    backgroundColor: colors.white,
-    paddingBottom: 20,
+    padding: 16,
+    backgroundColor: colors.background,
   },
-  productCart: {
-    marginTop: 25,
-    width: '90%',
-    marginBottom: '5%',
-    marginHorizontal: '5%',
+  item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.lightGray,
-    borderRadius: 10,
-    padding: 10,
-    shadowColor: colors.black,
+    marginBottom: 16,
+    padding: 16,
+    backgroundColor: colors.white,
+    borderRadius: 8,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.5,
-    elevation: 5,
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  imageProduct: {
-    width: 100,
-    height: 100,
-    resizeMode: 'cover',
+  image: {
+    width: 50,
+    height: 50,
+    marginRight: 16,
     borderRadius: 8,
   },
-  containerText: {
-    marginLeft: 15,
-    justifyContent: 'center',
+  itemDetails: {
     flex: 1,
   },
-  name: {
-    color: colors.black,
-    fontSize: 20,
+  title: {
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 4,
   },
   count: {
+    fontSize: 14,
     color: colors.black,
-    fontSize: 16,
-    marginBottom: 5,
+    marginBottom: 4,
   },
   price: {
-    color: colors.black,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  priceTotal: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 14,
     color: colors.red,
-    marginTop: 15,
-    textAlign: 'center',
   },
-  btnFinish: {
+  removeButton: {
     backgroundColor: colors.red,
-    paddingVertical: 15,
-    borderRadius: 8,
-    width: '90%',
-    alignSelf: 'center',
-    marginTop: 20,
-    elevation: 3,
+    padding: 8,
+    borderRadius: 4,
   },
-  btnText: {
+  removeButtonText: {
     color: colors.white,
+    fontWeight: 'bold',
+  },
+  footer: {
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: colors.red,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+    alignItems: 'center',
+  },
+  total: {
     fontSize: 18,
-    textAlign: 'center',
+    fontWeight: 'bold',
+    marginBottom: 16,
   },
-  containerRemoveItem: {
-    justifyContent: 'center',
-    marginLeft: 10,
+  purchaseButton: {
+    backgroundColor: colors.black,
+    padding: 16,
+    borderRadius: 8,
   },
-  containerButton: {
-    width: '100%',
-    paddingHorizontal: 10,
-    backgroundColor: colors.white,
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: colors.lightGray,
+  purchaseButtonText: {
+    color: colors.white,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

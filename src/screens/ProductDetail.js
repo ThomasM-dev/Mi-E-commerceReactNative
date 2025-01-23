@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   View,
   Image,
@@ -8,63 +9,51 @@ import {
   TextInput,
 } from 'react-native';
 import { colors } from '../globals/colors';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/slices/cartSlice';
-import { useState } from 'react';
 
 const ProductDetail = ({ route }) => {
   const { product } = route.params;
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const [buttonText, setButtonText] = useState('Agregar al carrito');
-  const [disableButtom, setDisableButtom] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const handleAddCart = (product) => {
     if (count >= 1) {
       setButtonText('Producto agregado');
-      setDisableButtom(true);
+      setDisableButton(true);
       setTimeout(() => {
         setButtonText('Agregar al carrito');
-        setDisableButtom(false);
+        setDisableButton(false);
       }, 1000);
       const productxCount = product.price * count;
       const productWithCount = { ...product, count, productxCount };
       dispatch(addToCart(productWithCount));
     } else {
-      alert('Error', 'Ingrese al menos 1');
+      alert('La cantidad debe ser al menos 1');
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Image style={styles.imageProduct} source={{ uri: product.imageUrl }} />
-      <View style={styles.containerText}>
-        <Text style={styles.title}>{product.title}</Text>
-        <Text style={styles.description}>{product.description}</Text>
-        <Text style={styles.price}>${product.price} ARS</Text>
-        <View style={styles.containerInput}>
-          <TextInput
-            style={styles.inputCount}
-            keyboardType="numeric"
-            placeholder="Ingrese la cantidad"
-            placeholderTextColor={colors.white}
-            value={count.toString()}
-            onChangeText={(text) => setCount(Number(text))}
-          />
-        </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image source={{ uri: product.imageUrl }} style={styles.image} />
+      <Text style={styles.title}>{product.title}</Text>
+      <Text style={styles.price}>${product.price}</Text>
+      <Text style={styles.description}>{product.description}</Text>
+      <View style={styles.counterContainer}>
+        <TextInput
+          style={styles.input}
+          value={String(count)}
+          onChangeText={(text) => setCount(Number(text))}
+          keyboardType="numeric"
+        />
         <Pressable
-          style={[
-            styles.buttonCart,
-            disableButtom && { backgroundColor: colors.black },
-          ]}
-          disabled={disableButtom}
+          style={[styles.button, disableButton && styles.buttonDisabled]}
           onPress={() => handleAddCart(product)}
+          disabled={disableButton}
         >
-          <Text style={styles.textButtonCart}>
-            {buttonText}
-            <AntDesign name="shoppingcart" size={25} color="white" />
-          </Text>
+          <Text style={styles.buttonText}>{buttonText}</Text>
         </Pressable>
       </View>
     </ScrollView>
@@ -73,59 +62,58 @@ const ProductDetail = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
+    padding: 16,
     backgroundColor: colors.brown,
   },
-  imageProduct: {
+  image: {
     width: '100%',
-    height: 500,
+    height: 300,
     resizeMode: 'contain',
-    backgroundColor: colors.white,
-  },
-  containerText: {
-    width: '100%',
-    height: 250,
   },
   title: {
-    color: colors.white,
-    fontSize: 25,
-    textAlign: 'center',
-  },
-  description: {
-    color: colors.grey,
-    fontSize: 25,
-    margin: 20,
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginVertical: 8,
   },
   price: {
-    color: colors.white,
     fontSize: 20,
-    margin: 20,
+    color: colors.primary,
+    marginVertical: 8,
   },
-  containerInput: {
-    width: '70%',
-    height: '20%',
-    alignSelf: 'center',
+  description: {
+    fontSize: 16,
+    color: colors.text,
+    marginVertical: 8,
   },
-  inputCount: {
-    width: '100%',
-    height: '100%',
-    color: colors.white,
-    fontSize: 20,
+  counterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  input: {
     borderWidth: 1,
-    borderColor: colors.white,
-  },
-  buttonCart: {
-    marginTop: 40,
-    height: 50,
-    alignSelf: 'center',
-    width: '90%',
-    backgroundColor: colors.red,
-    justifyContent: 'center',
-  },
-  textButtonCart: {
-    fontSize: 30,
+    borderColor: colors.red,
+    padding: 8,
+    marginRight: 8,
+    width: 50,
     textAlign: 'center',
+  },
+  button: {
+    backgroundColor: colors.red,
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  buttonDisabled: {
+    backgroundColor: colors.blue,
+  },
+  buttonText: {
     color: colors.white,
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
+
 export default ProductDetail;

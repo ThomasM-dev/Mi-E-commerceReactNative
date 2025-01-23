@@ -1,14 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const cartSlice = createSlice({
-  initialState: {
-    value: {
-      updateAt: Date.now().toLocaleString(),
-      total: 0,
-      cart: [],
-    },
+const initialState = {
+  value: {
+    cart: [],
+    total: 0,
+    updateAt: null,
   },
+};
+
+const cartSlice = createSlice({
   name: 'cart',
+  initialState,
   reducers: {
     addToCart: (state, action) => {
       if (
@@ -28,9 +30,14 @@ const cartSlice = createSlice({
       );
       state.value.updateAt = Date.now().toLocaleString();
     },
+    clearCart: (state) => {
+      state.value.cart = [];
+      state.value.total = 0;
+      state.value.updateAt = Date.now().toLocaleString();
+    },
   },
 });
 
-export const { addToCart, removeItemToCart } = cartSlice.actions;
+export const { addToCart, removeItemToCart, clearCart } = cartSlice.actions;
 
 export default cartSlice;
