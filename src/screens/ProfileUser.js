@@ -6,17 +6,32 @@ import {
   Image,
   Pressable,
   Alert,
+  useEffect,
 } from 'react-native';
 import ProfileImgDefault from '../../assets/profileUserDefault.jpg';
 import * as ImagePicker from 'expo-image-picker';
 import { useSelector, useDispatch } from 'react-redux';
 import LocationSelector from '../components/LocationSelector';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUser } from '../store/slices/userSlice';
 
 const ProfileUser = () => {
   const dispatch = useDispatch();
   const emailUser = useSelector((state) => state.user.email);
-  const addressUser = useSelector((state) => state.addressUser.address);
+  const localId = useSelector((state) => state.user.localId)
+  const imgProfile = useSelector((state) => state.user.changeImage)
+
+useEffect(() => {
+  const getImgProfile = async () => {
+      const profileUser = await AsyncStorage.getItem(`imageUser_${localId}`)
+      if (profileUser) {
+        dispatch(setUser({changeImage: profileUser}))
+      } else {
+        dispatch(setUser({changeImage: ProfileImgDefault}))
+      }
+  }
+  getImgProfile();
+}, [localId]);
 
   const handleChangeImageCamera = async () => {
     try {
@@ -33,7 +48,7 @@ const ProfileUser = () => {
       });
       if (!data.canceled && data.assets?.length > 0 && data.assets[0].base64) {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
-        setImgProfile(base64Image);
+        dispatch(setUser({changeImage: base64Image}))
       } else {
         console.warn('Captura de imagen cancelada o datos inválidos.');
       }
@@ -58,7 +73,7 @@ const ProfileUser = () => {
       });
       if (!data.canceled && data.assets?.[0]?.base64) {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
-        setImgProfile(base64Image);
+        dispatch(setUser({changeImage: base64Image}))
       } else {
         console.warn('Selección de imagen cancelada o datos inválidos.');
       }
@@ -68,7 +83,7 @@ const ProfileUser = () => {
   };
 
   const handleSaveDateUser = () => {
-    console.log('datos del usuario', addressUser, emailUser, imageProfile);
+    AsyncStorage.setItem(`imageUser_${localId}`, imgProfile);
   };
 
   return (
@@ -97,7 +112,7 @@ const ProfileUser = () => {
       <View style={styles.locationSelectorContainer}>
         <LocationSelector />
       </View>
-      <Pressable onPress={saveProfileData} style={styles.pressable}>
+      <Pressable onPress={handleSaveDateUser} style={styles.pressable}>
         <Text style={styles.pressableText}>Guardar Cambios</Text>
       </Pressable>
       <Pressable
