@@ -11,9 +11,9 @@ const Orders = () => {
 
   useEffect(() => {
     if (data) {
-      setOrders(Object.values(data)); 
+      setOrders(Object.values(data));
     }
-  }, [data]); 
+  }, [data]);
 
   if (isLoading) {
     return <Text>Cargando...</Text>;
@@ -26,18 +26,18 @@ const Orders = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={orders} 
+        data={orders}
         keyExtractor={(item) => item.purchaseDate}
         renderItem={({ item }) => (
           <View style={styles.containerOrder}>
             <FlatList
-              data={item.products} 
-              keyExtractor={(producto) => producto.id.toString()} 
+              data={item.products}
+              keyExtractor={(producto) => producto.id.toString()}
               horizontal
               renderItem={({ item: producto }) => (
                 <View style={styles.containerImage}>
                   <Image
-                    source={{ uri: producto.imagen }}
+                    source={{ uri: producto.imageUrl }}
                     style={styles.imageItemOrder}
                   />
                 </View>
@@ -47,6 +47,7 @@ const Orders = () => {
               <Text style={styles.textBold}>
                 Número de orden #{item.purchaseDate}
               </Text>
+              <Text>Precio total de la compra ${item.totalPrice}</Text>
               <Text>
                 Fecha de orden:{' '}
                 {new Date(item.purchaseDate).toLocaleDateString()}{' '}
