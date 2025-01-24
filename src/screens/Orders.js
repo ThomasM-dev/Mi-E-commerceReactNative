@@ -3,6 +3,7 @@ import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useGetCartQuery } from '../services/userCartApi';
 import { colors } from '../globals/colors';
+import Spinner from '../components/Spinner';
 
 const Orders = () => {
   const localId = useSelector((state) => state.user.localId);
@@ -10,13 +11,12 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    if (data) {
-      setOrders(Object.values(data));
-    }
+    const fetchedOrders = data ? Object.values(data) : [];
+    setOrders(fetchedOrders);
   }, [data]);
 
   if (isLoading) {
-    return <Text>Cargando...</Text>;
+    return <Spinner />;
   }
 
   if (error) {

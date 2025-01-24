@@ -4,10 +4,14 @@ import ItemCategory from './ItemCategory';
 import { useNavigation } from '@react-navigation/native';
 import { useGetCategoryQuery } from '../services/ApiMyShop';
 import { useState } from 'react';
-
+import Spinner from './Spinner';
 const Categories = () => {
   const navigation = useNavigation();
-  const { data: categorias, isSuccess } = useGetCategoryQuery();
+  const { data: categorias, isSuccess, isLoading } = useGetCategoryQuery();
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   const [categorySelected, setCategorySelected] = useState('');
   const [categoryId, setCategoryId] = useState('');
