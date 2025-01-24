@@ -1,18 +1,38 @@
-import { FlatList, StyleSheet, View, Text, Image } from 'react-native';
-import Productos from '../data/Orden.json';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
+import { useGetCartQuery } from '../services/userCartApi';
 import { colors } from '../globals/colors';
 
 const Orders = () => {
+  const localId = useSelector((state) => state.user.localId);
+  const { data, error, isLoading } = useGetCartQuery(localId);
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setOrders(Object.values(data)); 
+    }
+  }, [data]); 
+
+  if (isLoading) {
+    return <Text>Cargando...</Text>;
+  }
+
+  if (error) {
+    return <Text>Hubo un error al cargar las órdenes.</Text>;
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={Productos}
-        keyExtractor={(item) => item.id}
+        data={orders} 
+        keyExtractor={(item) => item.purchaseDate}
         renderItem={({ item }) => (
           <View style={styles.containerOrder}>
             <FlatList
-              data={item.productos}
-              keyExtractor={(producto) => producto.nombre}
+              data={item.products} 
+              keyExtractor={(producto) => producto.id.toString()} 
               horizontal
               renderItem={({ item: producto }) => (
                 <View style={styles.containerImage}>
@@ -24,12 +44,13 @@ const Orders = () => {
               )}
             />
             <View style={styles.containerText}>
-              <Text style={styles.textBold}>Número de orden #{item.id}</Text>
+              <Text style={styles.textBold}>
+                Número de orden #{item.purchaseDate}
+              </Text>
               <Text>
                 Fecha de orden:{' '}
-                {new Date(item.fecha * 1000).toLocaleDateString()}
+                {new Date(item.purchaseDate).toLocaleDateString()}{' '}
               </Text>
-              <Text>Estado del Pedido: {item.estado}</Text>
             </View>
           </View>
         )}

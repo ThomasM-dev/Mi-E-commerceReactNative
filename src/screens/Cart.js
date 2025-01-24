@@ -18,7 +18,6 @@ const Cart = () => {
   const localId = useSelector((state) => state.user.localId);
   const productCart = useSelector((state) => state.cart.value.cart);
   const totalCart = useSelector((state) => state.cart.value.total);
-
   const dispatch = useDispatch();
 
   const [addCart, { isLoading, isSuccess, isError }] = useAddCartMutation();
@@ -77,7 +76,7 @@ const Cart = () => {
             </Pressable>
           </View>
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.title}
       />
       <View style={styles.footer}>
         <Text style={styles.total}>Total: ${totalCart}</Text>
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
   },
   item: {
     flexDirection: 'row',
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
   footer: {
     marginTop: 16,
     padding: 16,
-    backgroundColor: colors.red,
+    backgroundColor: colors.white,
     borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

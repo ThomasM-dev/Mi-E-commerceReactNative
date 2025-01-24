@@ -78,12 +78,12 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 20,
-    color: colors.primary,
+    color: colors.white,
     marginVertical: 8,
   },
   description: {
     fontSize: 16,
-    color: colors.text,
+    color: colors.black,
     marginVertical: 8,
   },
   counterContainer: {

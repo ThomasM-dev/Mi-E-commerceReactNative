@@ -14,7 +14,9 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       if (
-        state.value.cart.find((product) => product.id === action.payload.id)
+        state.value.cart.find(
+          (product) => product.title === action.payload.title
+        )
       ) {
         alert('Producto ya existente');
       } else {
