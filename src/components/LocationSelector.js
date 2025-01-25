@@ -21,11 +21,11 @@ const LocationSelector = () => {
       const address = await AsyncStorage.getItem(`userAddress_${userId}`);
       if (address) {
         const parsedAddress = JSON.parse(address);
-        setCity(parsedAddress.cit || "");
-        setCountry(parsedAddress.country || "");
-        setPostalCode(parsedAddress.postalCode || "");
-        setStreet(parsedAddress.street || "");
-        setHeight(parsedAddress.height || "");
+        setCity(parsedAddress.cit || '');
+        setCountry(parsedAddress.country || '');
+        setPostalCode(parsedAddress.postalCode || '');
+        setStreet(parsedAddress.street || '');
+        setHeight(parsedAddress.height || '');
       }
     };
     fetchStoredAddress();
@@ -34,7 +34,10 @@ const LocationSelector = () => {
   const handleSaveAddress = async () => {
     const address = { city, country, postalCode, street, height };
     try {
-      await AsyncStorage.setItem(`userAddress_${userId}`, JSON.stringify(address));
+      await AsyncStorage.setItem(
+        `userAddress_${userId}`,
+        JSON.stringify(address)
+      );
     } catch (error) {
       console.error('Error al guardar la dirección en AsyncStorage', error);
     }
@@ -55,19 +58,19 @@ const LocationSelector = () => {
 
       const location = await Location.getCurrentPositionAsync({});
       const { latitude, longitude } = location.coords;
-      setPosition({ lat: latitude, long: longitude });
+
+      setPosition({
+        lat: latitude,
+        long: longitude,
+      });
 
       const response = await fetch(
-        `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}format=json&`
+        `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}&format=json&`
       );
+
       const data = await response.json();
       if (data.results.length > 0) {
-        const addressComponents = data.results[0].address_components;
-        setCity(addressComponents.find((comp) => comp.types.includes('locality'))?.long_name || '');
-        setCountry(addressComponents.find((comp) => comp.types.includes('country'))?.long_name || '');
-        setPostalCode(addressComponents.find((comp) => comp.types.includes('postal_code'))?.long_name || '');
-        setStreet(addressComponents.find((comp) => comp.types.includes('route'))?.long_name || '');
-        setHeight(addressComponents.find((comp) => comp.types.includes('street_number'))?.long_name || '');
+        console.log(data);
       }
     } catch (error) {
       console.error('Error al obtener la ubicación', error);
@@ -79,15 +82,36 @@ const LocationSelector = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.inputContainer}>
-        <CustomInput label="Ciudad" value={city} onChangeText={setCity} />
-        <CustomInput label="País" value={country} onChangeText={setCountry} />
+        <CustomInput
+          label="Ciudad"
+          value={city}
+          onChangeText={setCity}
+          placeholder="Ingresa la ciudad"
+        />
+        <CustomInput
+          label="País"
+          value={country}
+          onChangeText={setCountry}
+          placeholder="Ingresa el país"
+        />
         <CustomInput
           label="Código Postal"
           value={postalCode}
           onChangeText={setPostalCode}
+          placeholder="Ingresa el código postal"
         />
-        <CustomInput label="Calle" value={street} onChangeText={setStreet} />
-        <CustomInput label="Altura" value={height} onChangeText={setHeight} />
+        <CustomInput
+          label="Calle"
+          value={street}
+          onChangeText={setStreet}
+          placeholder="Ingresa la calle"
+        />
+        <CustomInput
+          label="Altura"
+          value={height}
+          onChangeText={setHeight}
+          placeholder="Ingresa la altura"
+        />
       </View>
       <Pressable onPress={handleGetLocation} style={styles.locationButton}>
         <Text style={styles.locationButtonText}>
@@ -100,7 +124,6 @@ const LocationSelector = () => {
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

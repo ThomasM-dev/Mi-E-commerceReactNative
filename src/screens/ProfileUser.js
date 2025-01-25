@@ -21,6 +21,7 @@ const ProfileUser = () => {
   const [imgProfile, setImgProfile] = useState(
     'https://i.pinimg.com/originals/3b/2e/3d/3b2e3d35f10b6adb795f1aa1bd472c4c.jpg'
   );
+  const [save, setSave] = useState(false);
 
   useEffect(() => {
     const getImgProfile = async () => {
@@ -47,7 +48,7 @@ const ProfileUser = () => {
       });
       if (!data.canceled && data.assets?.length > 0 && data.assets[0].base64) {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
-        setImgProfile(base64Image); // Update the local state
+        setImgProfile(base64Image);
       } else {
         console.warn('Captura de imagen cancelada o datos inválidos.');
       }
@@ -81,8 +82,10 @@ const ProfileUser = () => {
     }
   };
 
-  const handleSaveDateUser = () => {
-    AsyncStorage.setItem(`imageUser_${emailUser}`, imgProfile)
+  const handleSaveDateUser = async () => {
+    await AsyncStorage.setItem(`imageUser_${emailUser}`, imgProfile);
+    setSave(true);
+    setTimeout(() => setSave(false), 1500);
   };
 
   const handleLogout = async () => {
@@ -117,7 +120,10 @@ const ProfileUser = () => {
         <LocationSelector />
       </View>
       <Pressable onPress={handleSaveDateUser} style={styles.pressable}>
-        <Text style={styles.pressableText}>Guardar Cambios</Text>
+        <Text style={styles.pressableText}>
+          {' '}
+          {save ? 'Guardado' : 'Guardar Cambios'}
+        </Text>
       </Pressable>
       <Pressable
         onPress={handleLogout}
