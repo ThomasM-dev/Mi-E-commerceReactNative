@@ -9,7 +9,6 @@ const Orders = () => {
   const localId = useSelector((state) => state.user.localId);
   const { data, error, isLoading } = useGetCartQuery(localId);
   const [orders, setOrders] = useState([]);
-
   useEffect(() => {
     const fetchedOrders = data ? Object.values(data) : [];
     setOrders(fetchedOrders);
@@ -22,6 +21,7 @@ const Orders = () => {
   if (error) {
     return <Text>Hubo un error al cargar las órdenes.</Text>;
   }
+  console.log(data);
 
   return (
     <View style={styles.container}>
@@ -32,7 +32,7 @@ const Orders = () => {
           <View style={styles.containerOrder}>
             <FlatList
               data={item.products}
-              keyExtractor={(producto) => producto.id.toString()}
+              keyExtractor={(producto) => producto.title}
               horizontal
               renderItem={({ item: producto }) => (
                 <View style={styles.containerImage}>
@@ -48,10 +48,6 @@ const Orders = () => {
                 Número de orden #{item.purchaseDate}
               </Text>
               <Text>Precio total de la compra ${item.totalPrice}</Text>
-              <Text>
-                Fecha de orden:{' '}
-                {new Date(item.purchaseDate).toLocaleDateString()}{' '}
-              </Text>
             </View>
           </View>
         )}

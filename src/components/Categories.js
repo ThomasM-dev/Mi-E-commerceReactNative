@@ -1,24 +1,34 @@
-import { StyleSheet, FlatList, View } from 'react-native';
+import { StyleSheet, FlatList, View, Text } from 'react-native';
 import { colors } from '../globals/colors';
 import ItemCategory from './ItemCategory';
 import { useNavigation } from '@react-navigation/native';
 import { useGetCategoryQuery } from '../services/ApiMyShop';
-import { useState } from 'react';
 import Spinner from './Spinner';
+
 const Categories = () => {
   const navigation = useNavigation();
-  const { data: categorias, isSuccess, isLoading } = useGetCategoryQuery();
+  const {
+    data: categorias,
+    isLoading,
+    error,
+  } = useGetCategoryQuery();
 
   if (isLoading) {
     return <Spinner />;
   }
 
-  const [categorySelected, setCategorySelected] = useState('');
-  const [categoryId, setCategoryId] = useState('');
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          Ocurrió un error al cargar las categorías. Por favor, intenta
+          nuevamente.
+        </Text>
+      </View>
+    );
+  }
 
   const handleCategorySelected = (category) => {
-    setCategorySelected(category.category);
-    setCategoryId(category.id);
     navigation.navigate('ListProductCategory', {
       categorySelected: category.category,
       categoryId: category.id,
@@ -36,6 +46,7 @@ const Categories = () => {
             onPress={() => handleCategorySelected(item)}
           />
         )}
+        contentContainerStyle={styles.listContent}
       />
     </View>
   );
@@ -44,8 +55,23 @@ const Categories = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.black,
-    marginTop: 10,
     flex: 1,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  errorText: {
+    color: colors.red,
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  listContent: {
+    paddingBottom: 20,
   },
 });
 
