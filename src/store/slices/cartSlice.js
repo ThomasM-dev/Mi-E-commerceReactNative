@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { showMessage } from 'react-native-flash-message';
 
 const initialState = {
   value: {
@@ -18,7 +19,12 @@ const cartSlice = createSlice({
           (product) => product.title === action.payload.title
         )
       ) {
-        alert('Producto ya existente');
+        showMessage({
+          message: 'Error',
+          description: 'Producto ya existente en el carrito',
+          type: 'danger',
+          icon: 'info',
+        });
       } else {
         state.value.cart.push(action.payload);
         state.value.total += action.payload.productxCount;

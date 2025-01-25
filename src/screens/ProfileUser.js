@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { deleteSession } from '../config/dbSqlLite';
 import { clearUser } from '../store/slices/userSlice';
+import { showMessage } from 'react-native-flash-message';
 
 const ProfileUser = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,12 @@ const ProfileUser = () => {
     try {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
       if (status !== 'granted') {
-        console.warn('Permiso denegado para usar la cámara.');
+        showMessage({
+          message: 'Habilita los permisos desde ajustes',
+          description: 'Sin permiso de uso de camara',
+          type: 'warning',
+          icon: 'warning',
+        });
         return;
       }
       const data = await ImagePicker.launchCameraAsync({
@@ -50,10 +56,21 @@ const ProfileUser = () => {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
         setImgProfile(base64Image);
       } else {
-        console.warn('Captura de imagen cancelada o datos inválidos.');
+        showMessage({
+          message: 'Cancelado',
+          description: 'Seleccion de imagen cancelado o datos invalidos',
+          type: 'warning',
+          icon: 'warning',
+        });
       }
     } catch (error) {
-      console.error('Error al capturar la imagen:', error);
+      showMessage({
+        message: 'Error',
+        description:
+          'Tuvimos un error al capturar la imagen. Reintenta Nuevamente',
+        type: 'warning',
+        icon: 'warning',
+      });
     }
   };
 
@@ -62,7 +79,12 @@ const ProfileUser = () => {
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        console.warn('Permiso denegado para acceder a la galería.');
+        showMessage({
+          description: 'Permiso denegado para acceder a la galeria',
+          message: 'Habilita desde ajustes',
+          type: 'warning',
+          icon: 'warning',
+        });
         return;
       }
       const data = await ImagePicker.launchImageLibraryAsync({
@@ -73,12 +95,22 @@ const ProfileUser = () => {
       });
       if (!data.canceled && data.assets?.[0]?.base64) {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
-        setImgProfile(base64Image); // Update the local state
+        setImgProfile(base64Image);
       } else {
-        console.warn('Selección de imagen cancelada o datos inválidos.');
+        showMessage({
+          message: 'Cancelado',
+          description: 'Seleccion de imagen cancelado o datos invalidos',
+          type: 'warning',
+          icon: 'warning',
+        });
       }
     } catch (error) {
-      console.error('Error al seleccionar la imagen:', error);
+      showMessage({
+        message: 'Error',
+        description: 'Tuvimos un error al capturar la imagen',
+        type: 'warning',
+        icon: 'warning',
+      });
     }
   };
 
@@ -86,9 +118,21 @@ const ProfileUser = () => {
     await AsyncStorage.setItem(`imageUser_${emailUser}`, imgProfile);
     setSave(true);
     setTimeout(() => setSave(false), 1500);
+    showMessage({
+      message: 'Guardado correctamente',
+      description: 'Datos guardados correctamente',
+      type: 'success',
+      icon: 'success',
+    });
   };
 
   const handleLogout = async () => {
+    showMessage({
+      message: 'Cierre de sesion',
+      description: 'Cierre de session correctamente',
+      type: 'success',
+      icon: 'success',
+    });
     dispatch(clearUser());
     await deleteSession();
   };

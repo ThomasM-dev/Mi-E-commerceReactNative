@@ -11,6 +11,7 @@ import {
 import { colors } from '../globals/colors';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/slices/cartSlice';
+import { showMessage } from 'react-native-flash-message';
 
 const ProductDetail = ({ route }) => {
   const { product } = route.params;
@@ -31,7 +32,12 @@ const ProductDetail = ({ route }) => {
       const productWithCount = { ...product, count, productxCount };
       dispatch(addToCart(productWithCount));
     } else {
-      alert('La cantidad debe ser al menos 1');
+      showMessage({
+        message: 'Error',
+        description: 'Debes agregar al menos 1 producto',
+        type: 'info', // Tipos predefinidos: "success", "warning", "danger", "info"
+        icon: 'info',
+      });
     }
   };
 

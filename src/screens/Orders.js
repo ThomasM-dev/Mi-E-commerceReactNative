@@ -21,7 +21,6 @@ const Orders = () => {
   if (error) {
     return <Text>Hubo un error al cargar las órdenes.</Text>;
   }
-  console.log(data);
 
   return (
     <View style={styles.container}>

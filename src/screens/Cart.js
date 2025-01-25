@@ -13,6 +13,7 @@ import {
 import { colors } from '../globals/colors';
 import EmptyCart from '../components/EmptyCart';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { showMessage } from 'react-native-flash-message';
 
 const Cart = () => {
   const localId = useSelector((state) => state.user.localId);
@@ -46,7 +47,11 @@ const Cart = () => {
 
     try {
       await addCart({ localId, cartData }).unwrap();
-      alert('Compra realizada con éxito!');
+      showMessage({
+        message: ' Compra realizada correctamente',
+        type: 'success', // Tipos predefinidos: "success", "warning", "danger", "info"
+        icon: 'success',
+      });
       dispatch(clearCart());
     } catch (error) {
       console.error('Error al finalizar compra:', error);
