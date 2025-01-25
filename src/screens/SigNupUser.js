@@ -7,6 +7,7 @@ import { useSigNupMutation } from '../services/AuthApi';
 import { sigNupValidation } from '../validation/sigNupValidation';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
+import { deleteSession, insertSession } from '../config/dbSqlLite';
 
 const SigNupUser = () => {
   const navigation = useNavigation();
@@ -29,8 +30,11 @@ const SigNupUser = () => {
       const user = {
         email: response.data.email,
         idToken: response.data.idToken,
+        localId: response.data.localId,
       };
       dispatch(setUser(user));
+      await deleteSession();
+      await insertSession(user.localId, user.email, user.idToken);
     } catch (error) {
       switch (error.path) {
         case 'email':

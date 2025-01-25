@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { colors } from '../globals/colors';
 
-const EmptyCart = () => {
+const EmptyCartOrders = ({ children }) => {
   return (
     <View style={styles.containerEmptyCart}>
       <Text style={styles.emoji}>😞</Text>
-      <Text style={styles.messageEmpty}>No hay productos en el carrito</Text>
+      <Text style={styles.messageEmpty}>{children}</Text>
     </View>
   );
 };
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EmptyCart;
+export default EmptyCartOrders;

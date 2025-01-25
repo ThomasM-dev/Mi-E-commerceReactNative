@@ -11,9 +11,9 @@ import {
   Pressable,
 } from 'react-native';
 import { colors } from '../globals/colors';
-import EmptyCart from '../components/EmptyCart';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { showMessage } from 'react-native-flash-message';
+import EmptyCartOrders from '../components/EmptyCartOrders';
 
 const Cart = () => {
   const localId = useSelector((state) => state.user.localId);
@@ -27,7 +27,8 @@ const Cart = () => {
     dispatch(removeItemToCart(item));
   };
 
-  if (productCart.length === 0) return <EmptyCart />;
+  if (productCart.length === 0)
+    return <EmptyCartOrders>No hay productos en el carrito</EmptyCartOrders>;
 
   const handleFinishPurchase = async () => {
     if (productCart.length === 0) return;

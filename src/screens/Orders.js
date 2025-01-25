@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { useGetCartQuery } from '../services/userCartApi';
 import { colors } from '../globals/colors';
 import Spinner from '../components/Spinner';
+import EmptyCartOrders from '../components/EmptyCartOrders';
 
 const Orders = () => {
   const localId = useSelector((state) => state.user.localId);
@@ -16,6 +17,13 @@ const Orders = () => {
 
   if (isLoading) {
     return <Spinner />;
+  }
+  if (orders.length === 0) {
+    return (
+      <EmptyCartOrders>
+        ¡Aún no tienes órdenes! ¿Qué tal si comienzas ahora?
+      </EmptyCartOrders>
+    );
   }
 
   if (error) {
