@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../globals/colors';
@@ -8,6 +8,7 @@ import loginValidation from '../validation/loginValidation';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
 import { insertSession } from '../config/dbSqlLite';
+import { showMessage } from 'react-native-flash-message';
 
 const LoginUser = () => {
   const navigation = useNavigation();
@@ -29,8 +30,15 @@ const LoginUser = () => {
         localId: response.data.localId,
       };
       dispatch(setUser(user));
-      insertSession(user.localId, user.email, user.idToken)
+      insertSession(user.localId, user.email, user.idToken);
     } catch (error) {
+      if (error.message) {
+        showMessage({
+          message: 'Contraseña o Correo incorrectos intente nuevamente',
+          type: 'danger',
+          icon: 'warning',
+        });
+      }
       if (error.path) {
         switch (error.path) {
           case 'email':

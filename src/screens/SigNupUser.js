@@ -7,6 +7,7 @@ import { useSigNupMutation } from '../services/AuthApi';
 import { sigNupValidation } from '../validation/sigNupValidation';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
+import { showMessage } from 'react-native-flash-message';
 
 const SigNupUser = () => {
   const navigation = useNavigation();
@@ -32,6 +33,13 @@ const SigNupUser = () => {
       };
       dispatch(setUser(user));
     } catch (error) {
+      if (error.message) {
+        showMessage({
+          message: 'Correo ya existente',
+          type: 'danger',
+          icon: 'warning',
+        });
+      }
       switch (error.path) {
         case 'email':
           setErrors({ email: error.message });
