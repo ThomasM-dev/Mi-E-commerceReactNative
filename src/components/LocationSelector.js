@@ -54,9 +54,10 @@ const locationSelector = () => {
           if(location.lat){
               const urlReverseGeocoding = `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}&format=json&`
               try {
-                  const  response = await fetch(urlReverseGeocoding)
-                  const  data = await response.json()
-                  
+                  const response = await fetch(urlReverseGeocoding)                  
+                  const data = await response.json()               
+                  console.log(data);
+                     
               } catch (error) {
                   console.log(error)
               }
@@ -65,6 +66,7 @@ const locationSelector = () => {
   )()
 },[position])
 
+  console.log(position);
   
   const handleSaveAddress = async () => {
     const address = { city, country, postalCode, street, height };

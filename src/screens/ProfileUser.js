@@ -26,80 +26,52 @@ const ProfileUser = () => {
 
   useEffect(() => {
     const getImgProfile = async () => {
-      const profileUser = await AsyncStorage.getItem(`imageUser_${emailUser}`);
-      if (profileUser) {
-        setImgProfile(profileUser); // Update the local state with stored image
-      }
+      const profileUser = await AsyncStorage.getItem(`imageUser_${localId}`);
+      if (profileUser) setImgProfile(profileUser); 
     };
-    getImgProfile();
-  }, [localId, emailUser]);
+    if (localId) getImgProfile();
+  }, [localId]);
 
-  const handleChangeImageCamera = async () => {
+  const handleChangeImage = async (source) => {
     try {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== 'granted') {
+      let permissionStatus;
+      if (source === 'camera') {
+        permissionStatus = await ImagePicker.requestCameraPermissionsAsync();
+      } else if (source === 'gallery') {
+        permissionStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      }
+
+      if (permissionStatus.status !== 'granted') {
         showMessage({
           message: 'Habilita los permisos desde ajustes',
-          description: 'Sin permiso de uso de camara',
+          description: source === 'camera' ? 'Sin permiso de uso de cámara' : 'Sin permiso para acceder a la galería',
           type: 'warning',
           icon: 'warning',
         });
         return;
       }
-      const data = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [9, 16],
-        base64: true,
-        quality: 1,
-      });
-      if (!data.canceled && data.assets?.length > 0 && data.assets[0].base64) {
-        const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
-        setImgProfile(base64Image);
-      } else {
-        showMessage({
-          message: 'Cancelado',
-          description: 'Seleccion de imagen cancelado o datos invalidos',
-          type: 'warning',
-          icon: 'warning',
-        });
-      }
-    } catch (error) {
-      showMessage({
-        message: 'Error',
-        description:
-          'Tuvimos un error al capturar la imagen. Reintenta Nuevamente',
-        type: 'warning',
-        icon: 'warning',
-      });
-    }
-  };
 
-  const handleChangeImageGallery = async () => {
-    try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        showMessage({
-          description: 'Permiso denegado para acceder a la galeria',
-          message: 'Habilita desde ajustes',
-          type: 'warning',
-          icon: 'warning',
-        });
-        return;
-      }
-      const data = await ImagePicker.launchImageLibraryAsync({
-        base64: true,
-        allowsEditing: true,
-        quality: 1,
-        aspect: [9, 16],
-      });
+      const data = source === 'camera'
+        ? await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [9, 16],
+            base64: true,
+            quality: 1,
+          })
+        : await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            base64: true,
+            quality: 1,
+            aspect: [9, 16],
+          });
+
       if (!data.canceled && data.assets?.[0]?.base64) {
         const base64Image = `data:image/jpeg;base64,${data.assets[0].base64}`;
         setImgProfile(base64Image);
       } else {
         showMessage({
           message: 'Cancelado',
-          description: 'Seleccion de imagen cancelado o datos invalidos',
+          description: 'Selección de imagen cancelada o datos inválidos',
           type: 'warning',
           icon: 'warning',
         });
@@ -107,7 +79,7 @@ const ProfileUser = () => {
     } catch (error) {
       showMessage({
         message: 'Error',
-        description: 'Tuvimos un error al capturar la imagen',
+        description: 'Tuvimos un error al capturar la imagen. Reintenta nuevamente',
         type: 'warning',
         icon: 'warning',
       });
@@ -115,7 +87,7 @@ const ProfileUser = () => {
   };
 
   const handleSaveDateUser = async () => {
-    await AsyncStorage.setItem(`imageUser_${emailUser}`, imgProfile);
+    await AsyncStorage.setItem(`imageUser_${localId}`, imgProfile);
     setSave(true);
     setTimeout(() => setSave(false), 1500);
     showMessage({
@@ -128,8 +100,8 @@ const ProfileUser = () => {
 
   const handleLogout = async () => {
     showMessage({
-      message: 'Cierre de sesion',
-      description: 'Cierre de session correctamente',
+      message: 'Cierre de sesión',
+      description: 'Cierre de sesión correctamente',
       type: 'success',
       icon: 'success',
     });
@@ -144,13 +116,13 @@ const ProfileUser = () => {
         <View style={styles.buttonsImageProfile}>
           <Pressable
             style={[styles.pressable, styles.cameraButton]}
-            onPress={handleChangeImageCamera}
+            onPress={() => handleChangeImage('camera')}
           >
             <Text style={styles.pressableText}>Usar cámara</Text>
           </Pressable>
           <Pressable
             style={[styles.pressable, styles.galleryButton]}
-            onPress={handleChangeImageGallery}
+            onPress={() => handleChangeImage('gallery')}
           >
             <Text style={styles.pressableText}>Desde galería</Text>
           </Pressable>
@@ -160,10 +132,9 @@ const ProfileUser = () => {
           Correo: {emailUser || 'No disponible'}
         </Text>
       </View>
-        <LocationSelector />
+      <LocationSelector />
       <Pressable onPress={handleSaveDateUser} style={styles.pressable}>
         <Text style={styles.pressableText}>
-          {' '}
           {save ? 'Guardado' : 'Guardar Cambios'}
         </Text>
       </Pressable>
