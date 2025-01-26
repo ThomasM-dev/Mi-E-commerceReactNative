@@ -5,7 +5,7 @@ import { ScrollView, View, Pressable, Text, StyleSheet } from 'react-native';
 import CustomInput from './CustomInput';
 import * as Location from 'expo-location';
 import { api_geocode_key } from '../data/ApiPost';
-
+import { showMessage } from 'react-native-flash-message';
 
 const locationSelector = () => {
   const [position, setPosition] = useState({ lat: '', long: '' });
@@ -14,85 +14,110 @@ const locationSelector = () => {
   const [postalCode, setPostalCode] = useState('');
   const [height, setHeight] = useState('');
   const [street, setStreet] = useState('');
+  const [addressLoaded, setAddressLoaded] = useState(false);
   const localId = useSelector((state) => state.user.localId);
 
   useEffect(() => {
-    const AddressStorage = async () => {
-      const address = await AsyncStorage.getItem(`userAddress_${userId}`);
-      if (address) {
-        const parsedAddress = JSON.parse(address);
-        setCity(parsedAddress.city || '');
-        setCountry(parsedAddress.country || '');
-        setPostalCode(parsedAddress.postalCode || '');
-        setStreet(parsedAddress.street || '');
-        setHeight(parsedAddress.height || '');
+    const getAddressFromStorage = async () => {
+      try {
+        const address = await AsyncStorage.getItem(`userAddress_${localId}`);        
+        if (address) {
+          const parsedAddress = JSON.parse(address);
+          setCity(parsedAddress.city);
+          setCountry(parsedAddress.country);
+          setPostalCode(parsedAddress.postalCode);
+          setStreet(parsedAddress.street);
+          setHeight(parsedAddress.height);
+          setAddressLoaded(true); 
+        }
+      } catch (error) {
+        setAddressLoaded(false)
+        console.error('Error al obtener la dirección desde AsyncStorage:', error);
       }
     };
-    AddressStorage();
-  }, [localId]);
+    getAddressFromStorage();
+  }, [localId]); 
 
-  useEffect(()=>{
-    (async () => {
-     try {
-         const {status} = await Location.requestForegroundPermissionsAsync()
-         if(status != "granted") return
-         const newLocation = await Location.getCurrentPositionAsync()
-         setPosition({
-             lat:newLocation.coords.latitude,
-             long:newLocation.coords.longitude
-         })         
-     } catch (error) {
-         console.log(error)
-     }
-    })()
 
- },[])
-  
- useEffect(()=>{
-  (
-      async () => {
-          if(position.lat){
-              const urlReverseGeocoding = `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}&format=json&`
-              try {
-                  const response = await fetch(urlReverseGeocoding)                                    
-                  const data = await response.json() 
-                  console.log(data);
-                                                     
-              } catch (error) {
-                  console.log(error)
-              }
-          }
+  useEffect(() => {
+    if (addressLoaded) return; 
+
+    const getLocation = async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') return;
+
+        const newLocation = await Location.getCurrentPositionAsync();
+        setPosition({
+          lat: newLocation.coords.latitude,
+          long: newLocation.coords.longitude,
+        });
+      } catch (error) {
+        console.error('Error al obtener la ubicación:', error);
       }
-  )()
-},[position])
+    };
 
-  
+    getLocation();
+  }, [addressLoaded]); 
+
+  useEffect(() => {
+    if (!addressLoaded) {
+      if (position.lat) {
+        const getGeocodeData = async () => {
+          const urlReverseGeocoding = `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}&format=json&`;
+          try {
+            const response = await fetch(urlReverseGeocoding);
+            const data = await response.json(); 
+            console.log(data);
+                     
+            setCity(data.address.city || '');
+            setCountry(data.address.country || '');
+            setHeight(data.address.house_number || '');
+            setPostalCode(data.address.zipCode || '');
+            setStreet(data.address.road || '');
+          } catch (error) {
+            console.error('Error al obtener datos geográficos:', error);
+          }
+        };
+        getGeocodeData();
+      }
+    }
+  }, [position]); 
+
   const handleSaveAddress = async () => {
     const address = { city, country, postalCode, street, height };
+    if (!city || !country || !postalCode || !street || !height) {
+      showMessage({
+        message: 'Completa los datos faltantes',
+        type: 'warning',
+      });
+      return;
+    }
     try {
-      await AsyncStorage.setItem(
-        `userAddress_${userId}`,
-        JSON.stringify(address)
-      );
+      await AsyncStorage.setItem(`userAddress_${localId}`, JSON.stringify(address));
+      showMessage({
+        message: 'Dirección Guardada',
+        type: 'success',
+      });
     } catch (error) {
       console.error('Error al guardar la dirección en AsyncStorage', error);
     }
   };
 
-  return(
+  return (
     <ScrollView style={styles.container}>
       <View style={styles.inputContainer}>
-        <CustomInput
-          label="Ciudad"
-          value={city}
-          onChangeText={setCity}
-          placeholder="Ingresa la ciudad"
-        />
         <CustomInput
           label="País"
           value={country}
           onChangeText={setCountry}
           placeholder="Ingresa el país"
+        />
+        <CustomInput
+          label="Provincia"
+          value={city}
+          onChangeText={setCity}
+          placeholder="Ingresa la ciudad"
         />
         <CustomInput
           label="Código Postal"
@@ -119,6 +144,7 @@ const locationSelector = () => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
