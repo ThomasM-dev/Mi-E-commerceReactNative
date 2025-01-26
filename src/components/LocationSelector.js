@@ -1,36 +1,71 @@
-import { StyleSheet, Text, Pressable, ScrollView, View } from 'react-native';
-import * as Location from 'expo-location';
-import { useState, useEffect } from 'react';
-import { api_geocode_key } from '../data/ApiPost';
-import CustomInput from './CustomInput';
 import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView, View, Pressable, Text, StyleSheet } from 'react-native';
+import CustomInput from './CustomInput';
+import * as Location from 'expo-location';
+import { api_geocode_key } from '../data/ApiPost';
 
-const LocationSelector = () => {
+
+const locationSelector = () => {
   const [position, setPosition] = useState({ lat: '', long: '' });
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [height, setHeight] = useState('');
   const [street, setStreet] = useState('');
-  const [loadingLocation, setLoadingLocation] = useState(false);
-  const userId = useSelector((state) => state.user.localId);
+  const localId = useSelector((state) => state.user.localId);
 
   useEffect(() => {
-    const fetchStoredAddress = async () => {
+    const AddressStorage = async () => {
       const address = await AsyncStorage.getItem(`userAddress_${userId}`);
       if (address) {
         const parsedAddress = JSON.parse(address);
-        setCity(parsedAddress.cit || '');
+        setCity(parsedAddress.city || '');
         setCountry(parsedAddress.country || '');
         setPostalCode(parsedAddress.postalCode || '');
         setStreet(parsedAddress.street || '');
         setHeight(parsedAddress.height || '');
       }
     };
-    fetchStoredAddress();
-  }, [userId]);
+    AddressStorage();
+  }, [localId]);
 
+  useEffect(()=>{
+    (async () => {
+     try {
+         const {status} = await Location.requestForegroundPermissionsAsync()
+         if(status != "granted") return
+         const newLocation = await Location.getCurrentPositionAsync()
+         setPosition({
+             lat:newLocation.coords.latitude,
+             long:newLocation.coords.longitude
+         })         
+     } catch (error) {
+         console.log(error)
+     }
+    })()
+
+ },[])
+  
+ useEffect(()=>{
+  (
+      async () => {
+          if(location.lat){
+              const urlReverseGeocoding = `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}&format=json&`
+              try {
+                  const  response = await fetch(urlReverseGeocoding)
+                  const  data = await response.json()
+                  
+              } catch (error) {
+                  console.log(error)
+              }
+          }
+      }
+  )()
+},[position])
+
+  
   const handleSaveAddress = async () => {
     const address = { city, country, postalCode, street, height };
     try {
@@ -43,43 +78,7 @@ const LocationSelector = () => {
     }
   };
 
-  const handleGetLocation = async () => {
-    setLoadingLocation(true);
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert(
-          'Permiso denegado',
-          'No se concedió permiso para acceder a la ubicación.'
-        );
-        setLoadingLocation(false);
-        return;
-      }
-
-      const location = await Location.getCurrentPositionAsync({});
-      const { latitude, longitude } = location.coords;
-
-      setPosition({
-        lat: latitude,
-        long: longitude,
-      });
-
-      const response = await fetch(
-        `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}&format=json&`
-      );
-
-      const data = await response.json();
-      if (data.results.length > 0) {
-        console.log(data);
-      }
-    } catch (error) {
-      console.error('Error al obtener la ubicación', error);
-    } finally {
-      setLoadingLocation(false);
-    }
-  };
-
-  return (
+  return(
     <ScrollView style={styles.container}>
       <View style={styles.inputContainer}>
         <CustomInput
@@ -113,11 +112,6 @@ const LocationSelector = () => {
           placeholder="Ingresa la altura"
         />
       </View>
-      <Pressable onPress={handleGetLocation} style={styles.locationButton}>
-        <Text style={styles.locationButtonText}>
-          {loadingLocation ? 'Obteniendo ubicación...' : 'Obtener Ubicación'}
-        </Text>
-      </Pressable>
       <Pressable onPress={handleSaveAddress} style={styles.saveButton}>
         <Text style={styles.saveButtonText}>Guardar Dirección</Text>
       </Pressable>
@@ -131,18 +125,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 20,
-  },
-  locationButton: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  locationButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   saveButton: {
     backgroundColor: '#28a745',
@@ -158,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LocationSelector;
+export default locationSelector;

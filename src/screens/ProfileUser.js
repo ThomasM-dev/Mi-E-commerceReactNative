@@ -160,9 +160,7 @@ const ProfileUser = () => {
           Correo: {emailUser || 'No disponible'}
         </Text>
       </View>
-      <View style={styles.locationSelectorContainer}>
         <LocationSelector />
-      </View>
       <Pressable onPress={handleSaveDateUser} style={styles.pressable}>
         <Text style={styles.pressableText}>
           {' '}
@@ -246,15 +244,6 @@ const styles = StyleSheet.create({
   logoutButton: {
     backgroundColor: '#dc3545',
     marginTop: 20,
-  },
-
-  locationSelectorContainer: {
-    alignItems: 'center',
-    width: '100%',
-    backgroundColor: '#fff',
-    paddingVertical: 20,
-    marginBottom: 30,
-    borderRadius: 12,
   },
 });
 

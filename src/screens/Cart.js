@@ -50,7 +50,7 @@ const Cart = () => {
       await addCart({ localId, cartData }).unwrap();
       showMessage({
         message: ' Compra realizada correctamente',
-        type: 'success', // Tipos predefinidos: "success", "warning", "danger", "info"
+        type: 'success', 
         icon: 'success',
       });
       dispatch(clearCart());
