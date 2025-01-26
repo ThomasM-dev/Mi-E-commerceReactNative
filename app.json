@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "MiE-commerce",
-    "slug": "MiE-commerce",
+    "slug": "mie-commerce",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logoApp.png",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/logoApp.png",
         "backgroundColor": "#000"
       },
-      "package": "com.thomasexpodev.MiE-commerce"
+      "package": "com.thomasexpodev.miecommerce"
     },
     "web": {
       "favicon": "./assets/logoApp.png"
@@ -30,8 +30,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "2be3056e-fae7-4970-b035-fe812d3ba11e"
+        "projectId": "236172d0-6998-4f2a-9666-e2c899006008"
       }
-    }
+    },
+    "owner": "thomasexpodev"
   }
 }
