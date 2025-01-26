@@ -67,9 +67,7 @@ const locationSelector = () => {
           const urlReverseGeocoding = `https://us1.locationiq.com/v1/reverse?key=${api_geocode_key}&lat=${position.lat}&lon=${position.long}&format=json&`;
           try {
             const response = await fetch(urlReverseGeocoding);
-            const data = await response.json(); 
-            console.log(data);
-                     
+            const data = await response.json();                      
             setCity(data.address.city || '');
             setCountry(data.address.country || '');
             setHeight(data.address.house_number || '');
